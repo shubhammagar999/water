@@ -1,0 +1,65 @@
+<div class="row" ng-init="getAll();">
+    <div class="col-lg-12">
+        <h1 class="page-header">Expense Type List</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div align="center" v-align="bottom" ng-hide="loading1 == 1" style="margin: auto; height:400px;">
+    <img src="resources/images/reload.gif" style="margin-top: 170px; height: 60px;width: 60px;">
+</div>
+<div class="row" ng-show="loading1 == 1">
+	<div class="col-lg-12">
+	    <div class="panel panel-default">
+            <div class="panel-body">
+            	<div class="row">
+		        	<div class="col-lg-12">
+		            	<input type="text" class="form-control" id="searchtext" ng-model="searchtext" onkeyup="angular.element(this).scope().getSearch();" placeholder = "Search by - Expense type"/>
+		            </div>
+		            <!-- <div class="col-lg-1">
+		            	<a class="btn btn-outline btn-info" href="#/expensetype/add">Add</a>
+		            </div> -->
+		        </div>
+		        <br>
+                <div class="row" id="addrecord">
+                    <center><p>No record available please add new expense type</p><br><a class="btn btn-outline btn-info" href="#/expensetype/add">Add</a></center>
+                </div>
+                <div class="table-responsive" id="checkrecord">
+                    <table class="table table-hover">
+                        <thead>
+							<tr>                
+								<th>Expense type</th>  
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="expensetype in filteredTodos | filter : expensetype">
+								<td>{{expensetype.etm_type}}</td>
+								<td>
+									<a href="#/expensetype/edit/{{expensetype.etm_id}}"><i class="fa fa-pencil"></i></a>
+									<i class="fa fa-trash" ng-click="deleteExpensetype(expensetype.etm_id)"></i></td>
+							</tr>
+						</tbody>
+                    </table>
+                    <br>
+                    <span id="pagination_detail" ng-show="filteredTodos.length > 0" class="pagination_ds">Showing {{ filterUserend }} to {{filterUser}} of {{expensetypeListcount}} Expense's Type</span>
+				    <span id="pagination_div" align="right" ng-show="filteredTodos.length > 0"
+				          style="float: right;margin-top: -27px;">
+				      <pagination
+				              ng-model="currentPage"
+				              total-items="expensetypeListcount"
+				              max-size="maxSize"
+				              boundary-links="true" data-num-pages="noOfPages"
+				              items-per-page="numPerPage">
+				      </pagination>
+			    	</span>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+	    </div>
+	    <!-- /.panel -->
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->

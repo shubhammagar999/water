@@ -1,0 +1,93 @@
+<style type="text/css">
+    .scroll {
+    height: 200px;
+    overflow-y: scroll;
+    padding: 0px 0px;
+    }
+    .tableFixHead th { 
+        position: sticky; top: 0;
+        background-color: #EEEEEE;
+         }
+</style>
+<div class="row" ng-init="getAll();">
+    <div class="col-lg-12">
+        <h1 class="page-header">Promotional SMS</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+				<div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Recipient</label>
+                            <textarea id="cm_mob" class="form-control" ng-model="message.cm_mob" rows="3"></textarea>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label>Message</label>
+                            <textarea id="cm_msg" class="form-control" ng-model="message.cm_msg"  rows="3"></textarea>
+                        </div>
+                    </div>
+                    <!-- <div class="row"> -->
+                       <!--  <div class="col-lg-12">
+                            <input type="text" class="form-control" id="searchtext" ng-model="searchtext" onkeyup="angular.element(this).scope().getSearch();" placeholder = "Search by - Name,Registered Address,contact,gst no"/>
+                        </div> -->
+                    <!-- </div> -->
+                    <div class="col-lg-6">
+                        <input type="text" class="form-control" id="searchtext" ng-model="searchtext" onkeyup="angular.element(this).scope().getSearch();" placeholder = "Search by - Name"/><br>
+                        <div class="table-responsive scroll tableFixHead" id="checkrecord">
+                            <table class="table table-hover">
+                                <thead >
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Contact</th>
+                                        <th>Action <input type="checkbox" id="selectall" class="custom-control-input" ng-model="rcm_check_all" ng-change="checkBoxAll($index)"/>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="customer in filteredTodos | filter : customer">
+                                        <td>{{customer.cm_name}}</td>
+                                        <td>{{customer.cm_mobile}}</td>
+                                        <td>
+                                            <input type="checkbox" name="check" id="samecheck" class="all" ng-model="customer.samecheck"  ng-change="getsamecheck($index)">
+
+                                            
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br>
+                           <!--  <span id="pagination_detail" class="pagination_ds">Showing {{ filterUserend }} to {{filterUser}} of {{customerListcount}} Debtor's</span> -->
+                            <!-- <span id="pagination_div" align="right" ng-show="filteredTodos.length > 0"
+                                  style="float: right;margin-top: -27px;">
+                              <pagination
+                                      ng-model="currentPage"
+                                      total-items="customerListcount"
+                                      max-size="maxSize"
+                                      boundary-links="true" data-num-pages="noOfPages"
+                                      items-per-page="numPerPage">
+                              </pagination>
+                            </span> -->
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <div class="row" id="addrecord">
+                    <center><p>No record available please add new Debtors</p><br><a class="btn btn-outline btn-info" href="#/customer/add">Add</a></center>
+                </div>
+				    <div class="col-lg-12">
+						<button  class="btn btn-outline btn-success" type="submit" id="btnsave" ng-click="sendSMS()">SAVE <span class="label label-success">alt+s</span></button>
+				    </div>
+                </div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->

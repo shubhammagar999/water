@@ -1,0 +1,103 @@
+<div class="row" ng-init="getCompany();">
+    <div class="col-lg-12">
+        <h1 class="page-header">Update Company Details</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+				<div class="row">
+				    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Company Name</label>
+                            <input type="text" id="com_name" class="form-control" ng-model="company.com_name" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>GST No.</label>
+                            <input type="text" id="com_gst" class="form-control" ng-model="company.com_gst" ng-blur="capitalize();" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Address</label>
+                            <textarea id="com_address" class="form-control" ng-model="company.com_address" rows="1"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>State</label>
+                            <select class="form-control" id="com_state" ng-model="company.com_state" ng-options="states as states for states in stateList" ng-change="getCities(company.com_state)">
+                                    <option value="">-- Select State--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>City</label>
+                            <select class="form-control" ng-disabled="!company.com_state" id="com_city" ng-model="company.com_city" ng-options="city for city in city" >
+                                    <option value="">-- Select City--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Pin Code</label>
+                            <input type="text" id="com_pin" class="form-control" ng-model="company.com_pin" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Contact number</label>
+                            <input type="text" id="com_contact" class="form-control" ng-model="company.com_contact" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>E-Mail Id</label>
+                            <input type="text" id="com_email" class="form-control" ng-model="company.com_email" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Note (Timings)</label>
+                            <textarea id="com_note" class="form-control" ng-model="company.com_note" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Comments (Terms & Conditions)</label>
+                            <textarea id="com_comment" class="form-control" ng-model="company.com_comment" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Is Composition</label>
+                            <input type="checkbox" ng-change="checkIsComposition()" ng-model="company.is_composition" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <img alt="your image" id="blah" height="100" width="100" ng-src="{{displayImage}}" ng-if="company.com_file==''"/>
+                            <img alt="your image" id="blah" height="100" width="100" ng-src="{{com_file}}" ng-if="company.com_file!=''"/>
+                            <input type='file' id="company_image" name="company_image" ng-model="company_image"  data-max-size="200000" multiple onchange="checkButton(this)" />
+                            <p style="font-size: 7pt; margin-top: 5px;"><b class="text-danger">Upload Image less than 200KB</b></p>
+                        </div>
+                    </div>
+				    <div class="col-lg-12">
+						<button  class="btn btn-outline btn-success" type="submit" id="btnsave" ng-click="updateCompany()">UPDATE</button>
+				    	<button  class="btn btn-outline btn-danger" type="button" onclick="window.location = '#/'" id="btncancel">Back</button>
+				    </div>
+                </div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->

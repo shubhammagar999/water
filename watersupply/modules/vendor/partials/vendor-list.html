@@ -1,0 +1,80 @@
+<div class="row" ng-init="getAll();">
+    <div class="col-lg-12">
+        <h1 class="page-header">Creditors List</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div align="center" v-align="bottom" ng-hide="loading1 == 1" style="margin: auto; height:400px;">
+    <img src="resources/images/reload.gif" style="margin-top: 170px; height: 60px;width: 60px;">
+</div>
+<div class="row" ng-show="loading1 == 1">
+	<div class="col-lg-12">
+	    <div class="panel panel-default">
+            <div class="panel-body">
+            	<div class="row">
+		        	<div class="col-lg-12">
+		            	<input type="text" class="form-control" id="searchtext" ng-model="searchtext" onkeyup="angular.element(this).scope().getSearch();" placeholder = "Search by - Name,Address,contact,gst no"/>
+		            </div>
+		        </div>
+		        <br>
+                <div class="row" id="addrecord">
+                    <center><p>No record available please add new creditors</p><br><a class="btn btn-outline btn-info" href="#/vendor/add">Add</a></center>
+                </div>
+                <div class="table-responsive" id="checkrecord">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+								<th>Name</th>
+                                <th>Address</th>
+								<th>Contact</th>
+                                <th>E-Mail Id</th>
+								<th>GST No</th>
+                                <th>Agent Name</th>
+								<th>Agent Contact Number</th>
+								<th>Opening Debit</th>
+								<th>Opening Credit</th>
+								<th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="vendor in filteredTodos | filter : vendor">
+								<td>{{vendor.vm_firm_name}}</td>
+                                <td>{{vendor.vm_address}} {{vendor.vm_state}} {{vendor.vm_city}} {{vendor.vm_pin}}</td>
+								<td>{{vendor.vm_mobile}}</td>
+                                <td>{{vendor.vm_email_id}}</td>
+								<td>{{vendor.vm_gst_no}}</td>
+                                <td>{{vendor.vm_agent_name}}</td>
+								<td>{{vendor.vm_agent_mobile}}</td>
+								<td>{{vendor.vm_opening_debit | number : '2'}}</td>
+								<td>{{vendor.vm_opening_credit | number : '2'}}</td>
+								<td>
+									<!-- <i class="fa fa-info-circle" data-toggle="modal" data-target="#view-details" ng-click="viewVendorDetails1($index)"></i> -->
+									<a href="#/vendor/edit/{{vendor.vm_id}}"><i class="fa fa-pencil"></i></a>
+									<i class="fa fa-trash" ng-click="deleteVendor(vendor.vm_id)"></i>
+								</td>
+		                    </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <span id="pagination_detail" ng-show="filteredTodos.length > 0" class="pagination_ds">Showing {{ filterUserend }} to {{filterUser}} of {{vendorListcount}} Creditor's</span>
+				    <span id="pagination_div" align="right" ng-show="filteredTodos.length > 0"
+				          style="float: right;margin-top: -27px;">
+				      <pagination
+				              ng-model="currentPage"
+				              total-items="vendorListcount"
+				              max-size="maxSize"
+				              boundary-links="true" data-num-pages="noOfPages"
+				              items-per-page="numPerPage">
+				      </pagination>
+			    	</span>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+	    </div>
+	    <!-- /.panel -->
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->

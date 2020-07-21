@@ -1,0 +1,291 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Daily Balance Report</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<!-- /.row -->
+<div align="center" v-align="bottom" ng-hide="loading1 == 1" style="margin: auto; height:400px;">
+    <img src="resources/images/reload.gif" style="margin-top: 170px; height: 60px;width: 60px;">
+</div>
+<div class="row" ng-show="loading1 == 1">
+	<div class="col-lg-12">
+	    <div class="panel panel-default">
+            <div class="panel-body">
+        		<div class="col-lg-12">
+				    <div class="col-lg-3">
+                        <div class="form-group input-group">
+                            <label>From Date</label>
+                            <div class="form-group input-group">
+	                            <input type="text" class="form-control" id="user-datepicker-from" readonly="readonly">
+	                            <span class="input-group-btn">
+	                                <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i>
+	                                </button>
+	                            </span>
+	                        </div>
+                        </div>
+                    </div>
+				    <div class="col-lg-3">
+                        <div class="form-group input-group">
+                            <label>To Date</label>
+                            <div class="form-group input-group">
+	                            <input type="text" class="form-control" id="user-datepicker-to" readonly="readonly">
+	                            <span class="input-group-btn">
+	                                <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i>
+	                                </button>
+	                            </span>
+	                        </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group pull-left"><br>
+							<button  class="btn btn-outline btn-info" type="button" id="filter-user-btn" ng-click="filter()"><i class="fa fa-filter"></i> Filter</button>
+							<button  class="btn btn-outline btn-primary" type="button" id="reset-user-btn" ng-click="reset()"><i class="fa fa-times"></i> Reset</button>
+						</div>
+					</div>
+                </div>
+            	<div class="row">
+		        	<div class="col-lg-6">
+		            	<input type="text" class="form-control" id="searchtext" ng-model="searchtext" onkeyup="angular.element(this).scope().getSearch();" placeholder = "Search Here..."/>
+		            </div>
+		            <div class="col-lg-4">
+		            	<label>Balance = {{totalvalue}}</label>
+		            </div>
+		            <div class="col-lg-2">
+		            	<button  class="btn btn-outline btn-danger" type="button" onclick="window.location = '#/'" id="btncancel">Back</button>
+		            </div>
+		        </div>
+		        <br>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+							<tr>
+								<th>Type</th>
+								<th>Date</th>
+								<th>Income</th>
+								<th>Expense</th>
+								<th>Balance</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="purchase in filteredTodos | filter : purchase">
+								<td>{{purchase.type}}</td>
+								<td>{{purchase.date | date : 'dd-MM-yyyy'}}</td>
+								<td>{{(purchase.quant * purchase.credit) | number:2}}</td>
+								<td>{{purchase.debit | number:2}}</td>
+								<td>{{purchase.bal}}</td>
+								<td ng-if="purchase.type == 'expense'">
+									<i class="fa fa-info-circle" data-toggle="modal" data-target="#view-details" ng-click="viewExpenseDetails($index)"></i>
+								</td>
+								<td ng-if="purchase.type == 'income'">
+									<i class="fa fa-info-circle" data-toggle="modal" data-target="#view-sale-details" ng-click="viewSaleDetails($index)"></i>
+								</td>
+							</tr>
+						</tbody>	
+                    </table>
+                    <br>
+                    <span id="pagination_detail" ng-show="filteredTodos.length > 0" class="pagination_ds">Showing {{ filterUserend }} to {{filterUser}} of {{purchaseList.length}} Purchase's</span>
+				    <span id="pagination_div" align="right" ng-show="filteredTodos.length > 0"
+				          style="float: right;margin-top: -27px;">
+				      <pagination
+				              ng-model="currentPage"
+				              total-items="purchaseList.length"
+				              max-size="maxSize"
+				              boundary-links="true" data-num-pages="noOfPages"
+				              items-per-page="numPerPage">
+				      </pagination>
+			    	</span>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+	    </div>
+	    <!-- /.panel -->
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+
+<div class="modal fade" id="view-details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Daily Expense Details</h4>
+            </div>
+            <div class="modal-body">
+            	<div class="container">
+            		<div class="col-lg-12">
+            			<div class="col-lg-4">
+		                    <div class="form-group">
+		                        <label>Payment Mode</label>
+		                        <select class="form-control" id="em_payment_mode" ng-model="expense.em_payment_mode">
+		                            <option value="" >Select Payment Mode</option>
+		                            <option >Cash</option>
+		                            <option >Cheque</option>
+		                            <option >Card</option>
+		                        </select>
+		                    </div>
+		                </div>
+		                <div class="col-lg-4">
+		                    <div class="form-group">
+		                        <label>Date</label>
+		                        <input type="text" class="form-control" id="dateExpense" ng-model="expense.em_date"/>
+		                    </div>
+		                </div>
+            		</div>
+            		<div class="col-lg-12">
+            			<div class="col-lg-4">
+		                    <div class="form-group">
+		                        <label>Type</label>
+		                        <input type="text" id="em_etm_id" ng-model="expense.etm_type" class="form-control"/>
+		                    </div>
+		                </div>
+		                <div class="col-lg-4">
+		                    <div class="form-group">
+		                        <label>Comment</label>
+		                        <input type="text" id="em_comment" class="form-control" ng-model="expense.em_comment" placeholder="Remark"/>
+		                    </div>
+		                </div>
+            		</div>
+            		<div class="col-lg-12">
+            			<div class="col-lg-4">
+		                    <div class="form-group">
+		                        <label>Received by</label>
+		                        <input type="text" id="em_received_by" class="form-control" ng-model="expense.em_received_by" />
+		                    </div>
+		                </div>
+		                <div class="col-lg-4">
+		                    <div class="form-group">
+		                        <label>Amount</label>
+		                        <input type="text" id="em_amount" class="form-control" ng-model="expense.em_amount" />
+		                    </div>
+		                </div>
+            		</div>
+            		<div class="col-lg-12" id="cheq">
+	                    <div class="col-lg-4">
+	                        <div class="form-group">
+	                            <label>Cheque Number</label>
+	                            <input type="text" id="em_cheque_no" class="form-control" ng-model="expense.em_cheque_no" />
+	                        </div>
+	                    </div>
+	                    <div class="col-lg-4">
+	                        <div class="form-group">
+	                            <label>Cheque Date</label>
+	                            <input type="text" class="form-control" id="em_cheque_date" ng-model="expense.em_cheque_date"/>
+	                        </div>
+	                    </div>
+	                </div>
+            	</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="view-sale-details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Sale Product Details</h4>
+            </div>
+            <div class="modal-body">
+            	<div class="container">
+            		<div class="col-lg-12">
+		                <div class="col-lg-4">
+		                    <div class="form-group">
+		                        <label>Item</label>
+		                        <input type="text" id="ctm_type" ng-model="product.ctm_type" class="form-control"/>
+		                    </div>
+		                </div>
+		                <div class="col-lg-4">
+		                    <div class="form-group">
+		                        <label>Quantity</label>
+		                        <input type="text" id="spm_quantity" class="form-control" ng-model="product.spm_quantity" />
+		                    </div>
+		                </div>
+	                </div>
+            		<!-- <div class="col-lg-12">
+		                <div class="col-lg-4">
+		                    <div class="form-group">
+		                        <label>Description</label>
+		                        <input type="text" id="ppm_description" class="form-control" ng-model="product.ppm_description" placeholder="Remark"/>
+		                    </div>
+		                </div>
+		                <div class="col-lg-4">
+		                    <div class="form-group">
+		                        <label>Code</label>
+		                        <input type="text" class="form-control" id="ppm_code" ng-model="product.ppm_code"/>
+		                    </div>
+		                </div>
+	                </div> -->
+            		<div class="col-lg-12">
+		                <div class="col-lg-4">
+		                    <div class="form-group">
+		                        <label>Price</label>
+		                        <input type="text" id="spm_rate" class="form-control" ng-model="product.spm_rate" />
+		                    </div>
+		                </div>
+	                    <div class="col-lg-4">
+	                        <div class="form-group">
+	                            <label>CGST</label>
+	                            <input type="text" id="spm_vat" class="form-control" ng-model="product.spm_vat" />
+	                        </div>
+	                    </div>
+	                </div>
+            		<div class="col-lg-12">
+		                <div class="col-lg-4">
+		                    <div class="form-group">
+		                        <label>SGST</label>
+		                        <input type="text" id="spm_sgst" class="form-control" ng-model="product.spm_sgst" />
+		                    </div>
+		                </div>
+	                    <div class="col-lg-4">
+	                        <div class="form-group">
+	                            <label>IGST</label>
+	                            <input type="text" id="spm_igst" class="form-control" ng-model="product.spm_igst" />
+	                        </div>
+	                    </div>
+	                </div>
+            		<div class="col-lg-12">
+		                <div class="col-lg-4">
+		                    <div class="form-group">
+		                        <label>Discount %</label>
+		                        <input type="text" id="spm_discount" class="form-control" ng-model="product.spm_discount" />
+		                    </div>
+		                </div>
+		                <div class="col-lg-4">
+		                    <div class="form-group">
+		                        <label>Total</label>
+		                        <input type="text" id="ppm_total" class="form-control" ng-model="product.ppm_total" />
+		                    </div>
+		                </div>
+	                </div>
+            		<div class="col-lg-12">
+	                    <div class="col-lg-4">
+	                        <div class="form-group">
+	                            <label>Date</label>
+	                            <input type="text" id="sm_date" class="form-control" ng-model="product.sm_date" />
+	                        </div>
+	                    </div>
+	                    <div class="col-lg-4">
+	                        <div class="form-group">
+	                            <label>Profit</label>
+	                            <label class="form-control">{{product.sm_profit * product.spm_quantity}}</label>
+	                        </div>
+	                    </div>
+	                </div>
+            	</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

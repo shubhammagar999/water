@@ -1,0 +1,99 @@
+<style>
+ .printshow{display:none;}
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Entry Delivery Details</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+				<div class="row">
+				    <div class="col-lg-4">
+                        <div class="form-group">
+                                <label>Client's Detail</label>
+                                <input type="text"
+                                    id="pm_cm_id"
+                                    ng-model="product.pm_cm_id"
+                                    typeahead="obj as obj.cm_search for obj in getSearchCust($viewValue)"
+                                    typeahead-loading="loadingCustList"
+                                    typeahead-no-results="noCustListResults"
+                                    class="form-control" placeholder="start typing">
+                                <i ng-show="loadingCustList" class="glyphicon glyphicon-refresh"></i>
+                                <div ng-show="noCustListResults">
+                                    <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                </div>
+                            </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Date</label>
+                        <div class="form-group input-group">
+                            <input type="text" class="form-control" id="pDate" ng-model="product.pm_date" readonly="readonly">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i>
+                                </button>
+                            </span>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <table style="box-shadow: 5px 5px 15px; border-radius: 10px;" class="table" border="0">
+                                <thead>
+                                    <tr>  
+                                        <th colspan="15"  class="text-center" style="background-color:#EEEEEE;border-radius: 10px;">Filled Bottle</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Qty</th>
+                                    </tr>
+                                </thead>
+                                <tbody>                                
+                                    <tr>      
+                                       <th align="center">
+                                           <img src="resources/images/filled.png" height="75" width="40">
+                                       </th>
+                                       <th>
+                                          <input type="number" id="pm_qty_filled" class="form-control" ng-model="product.pm_qty_filled"/>
+                                       </th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <table style="box-shadow: 5px 5px 15px; border-radius: 10px;" class="table" border="0">
+                                <thead>
+                                    <tr>  
+                                        <th colspan="2"  class="text-center" style="background-color:#EEEEEE;border-radius: 10px;">Empty Bottle</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Qty</th>
+                                    </tr>
+                                </thead>
+                                <tbody>                                
+                                    <tr>      
+                                       <th>
+                                           <img src="resources/images/empty.png" height="75" width="40">
+                                       </th>
+                                       <th>
+                                          <input type="number" id="pm_qty_empty" class="form-control" ng-model="product.pm_qty_empty"/>
+                                       </th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <button  class="btn btn-outline btn-success" type="submit" id="btnsave" ng-click="addProduct()">SAVE <span class="label label-success">alt+s</span></button>
+                            <button  class="btn btn-outline btn-danger" type="button" onclick="window.location = '#/product/list'" id="btncancel">Back</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>

@@ -1,0 +1,286 @@
+<div class="row" ng-init="getAll();">
+    <div class="col-lg-12">
+        <h1 class="page-header">Vendors Report</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div align="center" v-align="bottom" ng-hide="loading1 == 1" style="margin: auto; height:400px;">
+    <img src="resources/images/reload.gif" style="margin-top: 170px; height: 60px;width: 60px;">
+</div>
+<div class="row" ng-show="loading1 == 1">
+	<div class="col-lg-12">
+	    <div class="panel panel-default">
+            <div class="panel-body">
+            	<div class="col-lg-12">
+                    <div class="col-sm-offset-6 col-lg-4">
+                        <div class="form-group pull-left">
+							<button  class="btn btn-outline btn-warning" type="button" ng-click="exportXls()">Export</button>
+							<button  class="btn btn-outline btn-success" type="button" ng-click="exportPrint()">Print</button>
+						</div>
+					</div>
+                </div>
+            	<div class="row">
+		        	<div class="col-lg-6">
+		            	<input type="text" class="form-control" id="searchtext" ng-model="searchtext" onkeyup="angular.element(this).scope().getSearch();" placeholder = "Search by - Name,Registered Address,contact,gst no"/>
+		            </div>
+		        	<div class="col-lg-4">
+		            	<label class="form-control">Debit : {{totalvalue}}</label>
+		            </div>
+		            <div class="col-lg-2">
+		            	<button  class="btn btn-outline btn-danger" type="button" onclick="window.location = '#/dashboard'" id="btncancel">Back</button>
+		            </div>
+		        </div>
+		        <br>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+								<th>Name</th>
+								<th>Registered Address</th>
+								<th>Delivery Address</th>
+								<th>Contact</th>
+								<th>E-Mail Id</th>
+								<th>GST No</th>
+								<th>Debit</th>
+								<th>Credit</th>
+								<th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="customer in filteredTodos | filter : customer">
+								<td>{{customer.cm_name}}</td>
+								<td>{{customer.cm_address}} {{customer.cm_state}} {{customer.cm_city}} {{customer.cm_pin}}</td>
+								<td>{{customer.cm_del_address}} {{customer.cm_del_state}} {{customer.cm_del_city}} {{customer.cm_del_pin}}</td>
+								<td>{{customer.cm_mobile}}</td>
+								<td>{{customer.cm_email}}</td>
+								<td>{{customer.cm_gst_no}}</td>
+								<td>{{customer.debit | number : '2'}}</td>
+								<td>{{customer.credit | number : '2'}}</td>
+								<td>
+									<i class="fa fa-info-circle" data-toggle="modal" data-target="#view-details" ng-click="viewCustomerDetails1($index)"></i>
+									<a href="#/customer/edit/{{customer.cm_id}}"><i class="fa fa-pencil"></i></a>
+								</td>
+		                    </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <span id="pagination_detail" ng-show="filteredTodos.length > 0" class="pagination_ds">Showing {{ filterUserend }} to {{filterUser}} of {{customerListcount}} Vendor's</span>
+				    <span id="pagination_div" align="right" ng-show="filteredTodos.length > 0"
+				          style="float: right;margin-top: -27px;">
+				      <pagination
+				              ng-model="currentPage"
+				              total-items="customerListcount"
+				              max-size="maxSize"
+				              boundary-links="true" data-num-pages="noOfPages"
+				              items-per-page="numPerPage">
+				      </pagination>
+			    	</span>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+	    </div>
+	    <!-- /.panel -->
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+
+<div class="modal fade" id="view-details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Vendors Details</h4>
+            </div>
+            <div class="modal-body">
+            	<table class="table">
+            		<tr>
+			          <td><input class="form-control" id="user-datepicker-from" type="text" placeholder="From Date"></td>
+			          <td><input class="form-control" id="user-datepicker-to" type="text" placeholder="To Date"></td>
+			          <td><button type="button" class="btn" id="filter-user-btn" ng-click="filter()">Filter</button></td>
+			          <!-- <td><button type="button" class="btn" id="reset-user-btn" ng-click="reset()">Reset</button></td> -->
+		          	</tr>
+		        </table>
+                <table class="table">
+            		<tr>
+            			<td>Name: <strong>{{venname}}</strong></td>
+            			<td>Number: <strong>{{venno}}</strong></td>
+            			<td>Address: <strong>{{venadd}}</strong></td>
+            			<td>Credit: <strong>{{venbal}}</strong></td>
+            			<td>Debit: <strong>{{vendebit}}</strong></td>
+            		</tr>
+            	</table>
+            	<table class="table" border="1" id="contentexport">
+					<thead>
+					<tr>
+						<th>Type</th>
+						<th>Invoice</th>
+						<th>Date</th>
+						<th>Debit</th>
+						<th>Credit</th>
+						<th>DR/CR</th>
+						<th>Balance</th>
+						<th>Action</th>
+					</tr>
+					</thead>
+					<tbody id="content">
+					<tr ng-repeat="purchaseDetails in categoryList | filter : purchaseDetails">
+						<td style="padding:4px 8px 4px 8px;" ng-if="purchaseDetails.ctype=='cash'">{{purchaseDetails.type}} ({{purchaseDetails.ctype}})</td>
+						<td style="padding:4px 8px 4px 8px;" ng-if="purchaseDetails.ctype!='cash'">{{purchaseDetails.type}}</td>
+						<td style="padding:4px 8px 4px 8px;">{{purchaseDetails.invoice}}</td>
+						<td style="padding:4px 8px 4px 8px;">{{purchaseDetails.date | date : 'dd-MM-yyyy'}}</td>
+						<td style="padding:4px 8px 4px 8px;">{{purchaseDetails.debit}}</td>
+						<td style="padding:4px 8px 4px 8px;">{{purchaseDetails.credit}}</td>
+						<td style="padding:4px 8px 4px 8px;">{{purchaseDetails.drcr}}</td>
+						<td style="padding:4px 8px 4px 8px;">{{purchaseDetails.bal}}</td>
+						<td style="padding:4px 8px 4px 8px;" ng-if="purchaseDetails.type == 'Sale'"><i class="fa fa-info-circle" ng-click="viewSaleDetails($index)"></i>
+
+							<i class="fa fa-pencil" ng-click="redirect(purchaseDetails.idd)"></i>
+							 <!-- <a href="#/sale/edit/{{purchaseDetails.idd}}" data-dissmiss="modal" class="close" ><i class="fa fa-pencil"></i></a>--></td> 
+						<td style="padding:4px 8px 4px 8px;" ng-if="purchaseDetails.type == 'Return'"><i class="fa fa-info-circle" ng-click="viewSaleReturnDetails($index)"></i>
+							 <a href="#/sale/edit/{{purchaseDetails.idd}}"></a></td>
+						<td style="padding:4px 8px 4px 8px;" ng-if="purchaseDetails.type == 'Cashbook' || purchaseDetails.type == 'opening'">&nbsp;</td>
+					</tr>
+					</tbody>
+				</table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" ng-click="exportXlsLedger();">Export</button>
+                <button type="button" class="btn btn-primary" ng-click="printDetails();">Print</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="view-sale-details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Sale Details</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+            		<tr>
+            			<td>Serial No : <strong>{{sales.sm_invoice_no}}</strong><br>E-Way bill no. : <strong>{{sales.sm_eway_bill_no}}</strong></td>
+            			<td>Date : <strong>{{sales.sm_date | date :  "dd-MM-yyyy"}}</strong></td>
+            			<td>Debtors : <strong>{{sales.cm_name}} ({{sales.cm_address}} {{sales.cm_state}} {{sales.cm_city}} {{sales.cm_pin}})</strong></td>
+            			<td>Amount : <strong>{{sales.sm_amount}}</strong>
+            				<span class="pull-right">Status : <p ng-if="sales.sm_status == 0" class="text-success">OK</p>
+            					<p ng-if="sales.sm_status == 1" class="text-danger">Cancelled</p>
+            				</span>
+            			</td>
+            		</tr>
+            	</table>
+            	<table class="table" border="1">
+					<thead>
+						<tr>      
+							<th>Sr. No.</th>
+							<th>Description of Goods</th>	
+							<th ng-if="sales.com_is_composition == 0">HSN/SAC</th>
+							<th>Quantity</th>
+							<th>Price</th>
+							<!-- <th ng-if="sales.com_is_composition == 0">Disc(%)</th> -->
+							<th ng-if="sales.com_is_composition == 0">CGST(%)</th>
+							<th ng-if="sales.com_is_composition == 0">SGST(%)</th>
+							<th ng-if="sales.com_is_composition == 0">IGST(%)</th>	
+							<th>Net Amount</th>
+						</tr>
+					</thead>
+					<tbody id="contentsale">
+						<tr ng-repeat="data in saleProductList">
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center">{{data.srno}}</td>	
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" >{{data.pm_search}}</td>
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center" ng-if="sales.com_is_composition == 0">{{data.pm_hsn}}</td>	
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center">{{data.spm_quantity}} {{data.productunit}}</td>
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center">{{data.spm_rate}}</td>
+							<!-- <td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center" ng-if="sales.com_is_composition == 0">{{data.spm_discount}}%</td> -->
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center" ng-if="sales.com_is_composition == 0">{{data.spm_cgst}}%</td>
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center" ng-if="sales.com_is_composition == 0">{{data.spm_sgst}}%</td>
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center" ng-if="sales.com_is_composition == 0">{{data.spm_igst}}%</td>
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center">{{data.spm_netamt | number:2}}</td>
+						</tr>
+					</tbody>
+				</table>
+				<table id="hidetablegst">
+					<thead>
+						<tr>
+	                      <td rowspan="2" width="32%" style="padding:4px 8px 4px 8px; font-size:10pt;">HSN/SAC</td>
+	                      <td rowspan="2" width="17%" style="padding:4px 8px 4px 8px; font-size:10pt;">Taxable Value</td>
+	                      <td colspan="2" width="17%" style="padding:4px 8px 4px 8px; font-size:10pt;">Central Tax</td>
+	                      <td colspan="2" width="17%" style="padding:4px 8px 4px 8px; font-size:10pt;">State Tax</td>
+	                      <td rowspan="2" width="17%" style="padding:4px 8px 4px 8px; font-size:10pt;">Total Tax Amount</td>
+	                    </tr>
+	                    <tr>
+	                      <td style="padding:4px 8px 4px 8px; font-size:10pt;">Rate</td>
+	                      <td style="padding:4px 8px 4px 8px; font-size:10pt;">Amount</td>
+	                      <td style="padding:4px 8px 4px 8px; font-size:10pt;">Rate</td>
+	                      <td style="padding:4px 8px 4px 8px; font-size:10pt;">Amount</td>
+	                    </tr>
+					</thead>
+					<tbody id="gstdist">
+						<tr ng-repeat="data in gstProductList">
+							<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.pm_hsn}}</td>	
+							<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.taxable_value | number:2}}</td>
+							<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.spm_cgst}}%</td>
+							<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.tax_cgst | number:2}}</td>
+							<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.spm_sgst}}%</td>
+							<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.tax_sgst | number:2}}</td>
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center">{{parseFloat(data.tax_cgst) + parseFloat(data.tax_sgst) | number:2}}</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="right"><strong>Total</strong></td>	
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center"><strong>{{sumtaxable_value | number:2}}</strong></td>
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center"></td>
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center"><strong>{{sumtax_cgst | number:2}}</strong></td>
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center"></td>
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center"><strong>{{sumtax_sgst | number:2}}</td>
+							<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center"><strong>{{sumtotal_tax | number:2}}</strong></td>
+						</tr>
+					</tfoot>
+				</table>
+            </div>
+            <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-primary" ng-click="printDetails();">Print</button> -->
+                <button type="button" class="btn btn-primary" ng-click="printSaleDetails();">Print</button><!-- <button type="button" class="btn btn-info" id="sendemails" ng-click="sendEmail();">E-Mail</button> -->
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div id="printTable">
+    <table class="table table-hover" id="contentexportList">
+        <thead>
+            <tr>
+				<th>Name</th>
+				<th>Registered Address</th>
+				<th>Delivery Address</th>
+				<th>Contact</th>
+				<th>E-Mail Id</th>
+				<th>GST No</th>
+				<th>Debit</th>
+				<th>Credit</th>
+			</tr>
+        </thead>
+        <tbody id="contentExportPrint">
+            <tr ng-repeat="customer in customerList | filter : customer">
+				<td>{{customer.cm_name}}</td>
+				<td>{{customer.cm_address}} {{customer.cm_state}} {{customer.cm_city}} {{customer.cm_pin}}</td>
+				<td>{{customer.cm_del_address}} {{customer.cm_del_state}} {{customer.cm_del_city}} {{customer.cm_del_pin}}</td>
+				<td>{{customer.cm_mobile}}</td>
+				<td>{{customer.cm_email}}</td>
+				<td>{{customer.cm_gst_no}}</td>
+				<td>{{customer.debit | number : '2'}}</td>
+				<td>{{customer.credit | number : '2'}}</td>
+			</tr>
+        </tbody>
+    </table>
+</div>

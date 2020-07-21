@@ -1,0 +1,233 @@
+<style>
+ .printshow{display:none;}
+
+ .table-responsive {
+    max-height:300px;
+     overflow-y: auto;  
+}
+.table-responsive thead th { position: sticky; top: 0; }
+.table-responsive tfoot th { position: sticky; top: 0; }
+
+table  { border-collapse: collapse; width: 100%; }
+th, td { padding: 8px 16px; }
+th     { background:#eee; }
+
+
+
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">New Sale</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="row">
+							<div class="col-lg-5">
+								<div clas="row">
+									<div class="col-lg-5">
+				                        <div class="form-group">
+				                            <label>Invoice no</label>
+				                            <input type="text" id="sm_invoice_no" class="form-control" ng-model="sale.sm_invoice_no" readonly="readonly"/>
+				                        </div>
+				                    </div>
+				                    <div class="col-lg-7">
+				                        <div class="form-group">
+				                            <label>Client</label>
+				                            <input type="text"
+				                                id="sm_cm_id"
+				                                ng-model="sale.sm_cm_id"
+				                                typeahead="obj as obj.cm_search for obj in getSearchCust($viewValue)"
+				                                typeahead-loading="loadingCustList"
+				                                typeahead-no-results="noCustListResults"
+	                                			typeahead-on-select="getDetails(sale.sm_cm_id)"
+				                                class="form-control">
+				                            <i ng-show="loadingCustList" class="glyphicon glyphicon-refresh"></i>
+				                            <div ng-show="noCustListResults">
+				                                <i class="glyphicon glyphicon-remove"></i> No Results Found
+				                            </div>
+				                        </div>
+				                    </div>	
+			                	</div>
+							</div>
+
+							<div class="col-lg-6">
+								<div clas="row">
+									<div class="col-lg-4">
+				                        <div class="form-group">
+				                            <label>Last Billing Date</label>
+				                            <label class="form-control" readonly>{{last_bill | date:'dd-MM-yyyy'}}</label>
+				                        </div>
+				                    </div>
+				                    <!-- <div class="col-lg-4"> condition
+				                        <div class="form-group">
+				                            <label>Last Bill Date</label>
+				                            <input type="text" id="sm_invoice_no" class="form-control" ng-model="sale.sm_last_bill_date" readonly="readonly"/>
+				                        </div>
+				                    </div> -->
+									<div class="col-lg-4">
+				                         <label>From Date</label>
+				                            <div class="form-group input-group">
+					                            <input type="text" class="form-control" id="user-datepicker-from" readonly="readonly">
+					                            <span class="input-group-btn">
+					                                <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i>
+					                                </button>
+					                            </span>
+					                        </div>
+				                    </div>
+									<div class="col-lg-4">
+				                        <div class="form-group">
+				                             <label>To Date</label>
+					                            <div class="form-group input-group">
+						                            <input type="text" class="form-control" id="user-datepicker-to" readonly="readonly">
+						                            <span class="input-group-btn">
+						                                <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i>
+						                                </button>
+						                            </span>
+						                        </div>
+				                        </div>
+				                    </div>
+								</div>
+							</div>
+
+
+							<div class="col-lg-1">
+								<div clas="row">
+									<div class="col-lg-12">
+				                        <div class="form-group" style="margin-left:-40px;margin-top:23px;" >
+				                            <button  class="btn btn-success" type="button" id="report_user_btn" ng-click="getReport()">Get Report <span class="label label-success"></span></button>
+				                        </div>
+				                    </div>
+								</div>					    
+			                </div>	                
+			            </div>
+
+					<div class="col-lg-12"><hr>
+						<div class="col-lg-6">
+							<div class="table-responsive">
+			                    <table class="table table-hover">
+			                        <thead>
+										<tr>
+											<th>Sr No.</th>
+											<th>Date</th>
+											<th>Filled</th>
+											<th>Empty</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="view in productDetails | filter : view.pm_date">
+											<td>{{$index + 1}}.</td>
+											<td>{{view.pm_date | date : 'dd-MM-yyyy'}}</td>
+											<td>{{view.pm_qty_filled}}</td>
+											<td class="">{{view.pm_qty_empty}}</td>
+										</tr>
+									</tbody>
+									<tbody class="printshow" id="content">
+										<tr ng-repeat="view in productDetails | filter : view.pm_date">
+											<td style="padding:1px 8px 1px 8px;" align="center">{{$index + 1}}.</td>
+											<td style="padding:1px 8px 1px 8px;">{{view.pm_date | date : 'dd-MM-yyyy'}}</td>
+											<td style="padding:1px 8px 1px 8px;" align="center">{{sale.sm_product_price}}</td>
+											<td style="padding:1px 8px 1px 8px;" align="center">{{view.pm_qty_filled}}</td>
+											<td style="padding:1px 8px 1px 8px;" align="center">{{view.pm_qty_filled * sale.sm_product_price}}</td>
+										</tr>
+									</tbody>
+			                    </table>
+			                </div>
+						</div>
+						<div class="col-lg-6" align="center">
+							<div class="col-lg-4">
+		                        <div class="form-group">
+		                            <label>Total Enteries</label>
+									<label class="form-control">{{productDetails.length}}</label>
+		                        </div>
+		                    </div>
+							<div class="col-lg-4">
+		                        <div class="form-group">
+		                            <label>Total Filled</label>
+									<label class="form-control">{{sale.sm_qty_filled}}</label>
+		                        </div>
+		                    </div>
+							<div class="col-lg-4">
+		                        <div class="form-group">
+		                            <label>Total Empty</label>
+									<label class="form-control">{{sale.sm_qty_empty}}</label>
+		                        </div>
+		                    </div>
+						</div>
+						<div class="col-lg-6" align="center">
+							
+						</div>
+						<div class="col-lg-6" align="center"><hr>
+							<div class="col-lg-4">
+		                        <div class="form-group">
+		                            <label>Product Name</label>
+				                    <input type="text" id="sm_prod_name" class="form-control" ng-model="sale.sm_prod_name"/>
+		                        </div>
+		                    </div>
+							<div class="col-lg-4">
+		                        <div class="form-group">
+		                            <label>Price / Pcs</label>
+				                    <input type="text" id="sm_product_price" class="form-control" ng-model="sale.sm_product_price" ng-change="calculateTotal()"/>
+		                        </div>
+		                    </div>
+							<div class="col-lg-4">
+		                        <div class="form-group">
+		                            <label>Total Amount</label>
+									<label class="form-control">{{sale.sm_qty_filled * sale.sm_product_price}}</label>
+		                        </div>
+		                    </div>
+							<!-- <div class="col-lg-4">
+		                        <div class="form-group">
+		                            <label></label>
+									<button  class="btn btn-success" type="button" id="report_user_btn" ng-click="getReport()">Genera <span class="label label-success"></span></button>
+		                        </div>
+		                    </div> -->
+						</div>
+
+						<div class="col-lg-6">
+						</div>
+						<div class="col-lg-6"><hr>
+							<div class="col-lg-4">
+		                        <div class="form-group">
+		                            <label>Last Balance Amt</label>
+									<label class="form-control">{{sale.sm_cm_id.cm_balance}}</label>
+		                        </div>
+		                    </div>
+						</div>
+					</div>
+
+
+				    <div class="col-lg-12"><br>
+						<button  class="btn btn-outline btn-success" type="submit" id="btnsave" ng-click="saveData()">SAVE & PRINT <span class="label label-success">alt+s</span></button>
+						<!-- <button  class="btn btn-outline btn-primary" type="submit" id="btnsavesms" ng-click="saveDataWithSms();" disabled="disabled">SAVE & SMS</button> -->
+
+						<button  class="btn btn-outline btn-primary" type="submit" id="btnsavesms" ng-click="printDetails();">Print</button>
+
+				    	<button  class="btn btn-outline btn-danger" type="button" onclick="window.location = '#/sale'" id="btncancel">Back</button>
+				    </div>
+				</div>
+			        </div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- <table id="hidetablegst">
+	<tbody id="gstdist">
+		<tr ng-repeat="data in gstProductList">
+			<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.pm_hsn}}</td>	
+			<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.taxable_value | number:2}}</td>
+			<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.spm_cgst}}%</td>
+			<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.tax_cgst | number:2}}</td>
+			<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.spm_sgst}}%</td>
+			<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.tax_sgst | number:2}}</td>
+			<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center">{{parseFloat(data.tax_cgst) + parseFloat(data.tax_sgst) | number:2}}</td>
+		</tr>
+	</tbody>
+</table> -->

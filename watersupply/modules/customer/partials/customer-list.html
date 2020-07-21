@@ -1,0 +1,83 @@
+<div class="row" ng-init="getAll();">
+    <div class="col-lg-12">
+        <h1 class="page-header">Client's List</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div align="center" v-align="bottom" ng-hide="loading1 == 1" style="margin: auto; height:400px;">
+    <img src="resources/images/reload.gif" style="margin-top: 170px; height: 60px;width: 60px;">
+</div>
+<div class="row" ng-show="loading1 == 1">
+	<div class="col-lg-12">
+	    <div class="panel panel-default">
+            <div class="panel-body">
+            	<div class="row">
+		        	<div class="col-lg-12">
+		            	<input type="text" class="form-control" id="searchtext" ng-model="searchtext" onkeyup="angular.element(this).scope().getSearch();" placeholder = "Search by - Name,Address,contact,gst no"/>
+		            </div>
+		        </div>
+		        <br>
+                <div class="row" id="addrecord">
+                    <center><p>No record available please add new Debtors</p><br><a class="btn btn-outline btn-info" href="#/customer/add">Add</a></center>
+                </div>
+                <div class="table-responsive" id="checkrecord" >
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+								<th>Name</th>
+								<th>Client ID</th>
+								<th>Start Date</th>
+								<th>GST No</th>
+								<th>Contact</th>
+								<th>E-Mail Id</th>
+								<th>Address</th>
+								<th>Balance</th>
+								<!-- <th>Product Price</th> -->
+								<!-- <th>Opening Debit</th> -->
+								<!-- <th>Opening Credit</th> -->
+								<th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="customer in filteredTodos | filter : customer">
+								<td>{{customer.cm_name}}</td>
+								<td>{{customer.cm_serial_no}}</td>
+								<td>{{customer.cm_date | date}}</td>
+								<td>{{customer.cm_gst_no}}</td>
+								<td>{{customer.cm_mobile}}</td>
+								<td>{{customer.cm_email}}</td>
+								<td>{{customer.cm_address}} - {{customer.cm_pin}}</td>
+							<!-- 	<td>{{customer.cm_del_address}} {{customer.cm_del_state}} {{customer.cm_del_city}} {{customer.cm_del_pin}}</td> -->
+								<!-- <td>{{customer.cm_opening_debit | number : '2'}}</td> -->
+								<!-- <td>{{customer.cm_opening_credit | number : '2'}}</td> -->
+								<td>{{customer.cm_balance | number : '2'}}</td>
+								<td>
+									<a href="#/customer/edit/{{customer.cm_id}}"><i class="fa fa-pencil"></i></a>
+									<i class="fa fa-trash" ng-click="deleteCustomer(customer.cm_id)"></i>
+								</td>
+		                    </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <span id="pagination_detail" ng-show="filteredTodos.length > 0" class="pagination_ds">Showing {{ filterUserend }} to {{filterUser}} of {{customerListcount}} Client's</span>
+				    <span id="pagination_div" align="right" ng-show="filteredTodos.length > 0"
+				          style="float: right;margin-top: -27px;">
+				      <pagination
+				              ng-model="currentPage"
+				              total-items="customerListcount"
+				              max-size="maxSize"
+				              boundary-links="true" data-num-pages="noOfPages"
+				              items-per-page="numPerPage">
+				      </pagination>
+			    	</span>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+	    </div>
+	    <!-- /.panel -->
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->

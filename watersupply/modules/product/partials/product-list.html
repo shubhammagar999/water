@@ -1,0 +1,98 @@
+<div class="row" ng-init="getAll();">
+    <div class="col-lg-12">
+        <h1 class="page-header">Entry Delivery List</h1>
+        <!-- EMPLOYEE -->
+    </div>
+</div>
+<div align="center" v-align="bottom" ng-hide="loading1 == 1" style="margin: auto; height:400px;">
+    <img src="resources/images/reload.gif" style="margin-top: 170px; height: 60px;width: 60px;">
+</div>
+<div class="row" ng-show="loading1 == 1">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <input type="text" class="form-control" id="searchtext" ng-model="searchtext" onkeyup="angular.element(this).scope().getSearch();" placeholder = "Search by - Client-Name, Delivered-By "/>
+                    </div>
+                </div>
+                <br>
+                <div class="row" id="addrecord">
+                    <center><p>No record available please add new Entry</p><br><a class="btn btn-outline btn-info" href="#/product/add">Add</a></center>
+                </div>
+                <div class="table-responsive" id="checkrecord">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Client Name</th>
+                                <th>Date</th>
+                                <th>Filled Qyt</th>
+                                <th>Empty Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="product in filteredTodos | filter : product">
+                                <td>{{product.cm_name}}</td>
+                                <td>{{product.pm_date | date}}</td>
+                                <td>{{product.pm_qty_filled}}</td>
+                                <td>{{product.pm_qty_empty}}</td>  
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <span id="pagination_detail" ng-show="filteredTodos.length > 0" class="pagination_ds">Showing {{ filterUserend }} to {{filterUser}} of {{productListcount}} Entry's</span>
+                    <span id="pagination_div" align="right" ng-show="filteredTodos.length > 0"
+                          style="float: right;margin-top: -27px;">
+                      <pagination
+                              ng-model="currentPage"
+                              total-items="productListcount"
+                              max-size="maxSize"
+                              boundary-links="true" data-num-pages="noOfPages"
+                              items-per-page="numPerPage">
+                      </pagination>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal for Barcode details -->
+<div class="modal fade" id="bar-details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Bar Code</h4>
+            </div>
+            <div class="modal-body" >
+                <div class="modal-body text-center">
+                    <h3>{{ctmtype}} - ({{ppmcolorcode}}) {{ppmdescription}}</h3>
+                    <div id="content"><svg id="barcode"></svg></div>
+                </div>
+                <!-- <div class="modal-body text-center" ng-repeat="view in barWithQty track by $index" >
+                    
+                    <h3>{{view.ppm_item_name}} - ({{view.ppm_color_code}}) {{view.ppm_description}}</h3>
+                    <h3 id="content"><svg class="barcode" ></svg></h3>
+                    <hr>
+                </div> -->
+
+
+                <!--  <div class="modal-body text-center" id="barrepete"ng-repeat="view in barWithQty track by $index">
+                    <h3>{{ctmtype}} - ({{ppmcolorcode}}) {{ppmdescription}}</h3>
+                    <div id="content"><svg id="barcode"></svg></div>
+                    <hr>
+                </div> -->
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline btn-primary btn-ok" id="del" ng-click="printBarCode()">Print</button>
+            </div>
+        </div>
+    </div>
+</div>
+

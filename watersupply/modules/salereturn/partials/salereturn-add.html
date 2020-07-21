@@ -1,0 +1,219 @@
+<style>
+ .printshow{display:none;}
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">New Sale Return</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+				<div class="row">
+					<div class="col-lg-12">
+					    <div class="col-lg-3">
+	                        <div class="form-group">
+	                            <label>Serial no</label>
+	                            <input type="text"
+	                                id="srm_sm_id"
+	                                ng-model="sale.srm_sm_id"
+	                                typeahead="obj as obj.sm_invoice_no for obj in getSearchSale($viewValue)"
+	                                typeahead-loading="loadingList"
+	                                typeahead-no-results="noListResults"
+	                                typeahead-on-select="getSaleDetails()"
+	                                class="form-control">
+	                            <i ng-show="loadingList" class="glyphicon glyphicon-refresh"></i>
+	                            <div ng-show="noListResults">
+	                                <i class="glyphicon glyphicon-remove"></i> No Results Found
+	                            </div>
+	                        </div>
+	                    </div>
+					    <div class="col-lg-3">
+	                        <div class="form-group">
+	                            <label>Return Serial no</label>
+	                            <input type="text" id="srm_invoice_no" class="form-control" ng-model="sale.srm_invoice_no" readonly="readonly"/>
+	                        </div>
+	                    </div>
+					    <div class="col-lg-3">
+	                        <div class="form-group input-group">
+	                            <label>Date</label>
+	                            <div class="form-group input-group">
+		                            <input type="text" class="form-control" id="pDate" ng-model="sale.srm_date" readonly="readonly">
+		                            <span class="input-group-btn">
+		                                <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i>
+		                                </button>
+		                            </span>
+		                        </div>
+	                        </div>
+	                    </div>
+						<div class="col-lg-2">
+	                        <div class="form-group">
+								<label>Unsorted Product</label><br>
+                				<input type="checkbox" ng-change="checkIsTrue()" ng-model="sale.is_true" />
+							</div>
+						</div>
+	                </div>
+					<div class="col-lg-12">
+					    <div class="col-lg-3">
+	                        <div class="form-group">
+	                            <label>Debtors Name</label>
+	                            <input type="text" id="sm_cm_id" ng-model="sale.srm_sm_id.cm_name" class="form-control" readonly="readonly">
+	                        </div>
+	                    </div>
+					    <div class="col-lg-6">
+	                        <div class="form-group">
+	                            <label>Address</label>
+	                            <label class="form-control">{{sale.srm_sm_id.cm_address}} {{sale.srm_sm_id.cm_state}} {{sale.srm_sm_id.cm_city}} {{sale.srm_sm_id.cm_pin}}</label>
+	                        </div>
+	                    </div>
+					    <div class="col-lg-3">
+	                        <div class="form-group">
+	                            <label>Cash / Credit</label>
+	                            <input type="text" id="sm_cm_id" ng-model="sale.srm_sm_id.sm_payment_mode" class="form-control" readonly="readonly">
+	                        </div>
+	                    </div>
+					</div>
+					<div class="col-lg-12">
+						<table class="table" border="1">
+							<thead>
+								<tr>  
+									<th colspan="15"  class="text-center" style="background-color:#EEEEEE;border:solid 1px;">Bill Of Selected Product</th>
+								</tr>
+								<tr>      
+									<th>Sr. No.</th>
+									<!-- <th>Code</th> -->
+									<th>Description of Goods</th>	
+									<th ng-if="sale.com_is_composition == 0">HSN</th>
+									<th ng-if="sale.discount > 0">Disc(%)</th>
+									<th ng-if="sale.com_is_composition == 0">CGST(%)</th>
+									<th ng-if="sale.com_is_composition == 0">SGST(%)</th>
+									<th ng-if="sale.com_is_composition == 0">IGST(%)</th>	
+									<th>Quantity</th>
+									<th>Price</th>
+									<th>Net Amount</th>
+									<!-- <th class="action">MRP</th> -->
+									<th class="action">Action</th>
+								</tr>
+							</thead>
+							<tbody id="content">
+								<tr ng-repeat="data in selectedProductList track by $index">
+									<td style="padding:4px 8px 4px 8px;" align="center">{{data.srno}}</td>
+									<!-- <td style="padding:4px 8px 4px 8px;">{{data.ppm_code}}</td> -->
+									<td style="padding:4px 8px 4px 8px;">{{data.pm_search}}<br> 
+										<span style="font-size: 9pt;">code : {{data.ppm_code}}</span><br>
+										<span style="font-size: 9pt;">size : {{data.ppm_size}}</span></td>  </td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_hsn}}</td>	
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.discount > 0">{{data.spm_discount}}%</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.spm_cgst}}%</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.spm_sgst}}%</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.spm_igst}}%</td><td style="padding:4px 8px 4px 8px;" align="center">
+										<span class="printshow">
+											{{data.spm_quantity}}
+										</span>
+										<span class="print-hide">
+											<input type="number" class="form-control" ng-model="data.spm_quantity"  ng-change="calculateTotal()"/>
+										</span>
+									</td>
+									<td style="padding:4px 8px 4px 8px;" align="center">{{data.spm_rate}}</td>
+									<td style="padding:4px 8px 4px 8px;" align="center">{{data.netamt | number:2}}</td>
+									<!-- <td style="padding:4px 8px 4px 8px;" class="action">{{data.ppm_mrp}}</td> -->
+									<td style="padding:4px 8px 4px 8px;" class="action"><button  class="btn btn-outline btn-danger" type="submit" id="btnAddItemLine" ng-click="removeItem($index)"><i class="fa fa-minus-square" aria-hidden="true"></i></button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div id="newProductAdd">
+						<!-- TABLE ON TYPE -->
+		        		<div class="col-lg-12">
+							<table class="table" border="1">
+								<thead>
+									<tr>  
+										<th colspan="14"  class="text-center" style="background-color:#EEEEEE;border:solid 1px;">Bill Of Unsorted Product</th>
+									</tr>
+									<tr>      
+										<th>Sr. No.</th>
+										<th>Description of Goods</th>	
+										<!-- <th>Product</th>
+										<th>Design No</th>	
+										<th>Size</th>	
+										<th>Unit</th> -->
+										<th ng-if="sale.com_is_composition == 0">HSN</th>
+										<th ng-if="sale.discount > 0">Disc(%)</th>
+										<th ng-if="sale.com_is_composition == 0">CGST(%)</th>
+										<th ng-if="sale.com_is_composition == 0">SGST(%)</th>
+										<th ng-if="sale.com_is_composition == 0">IGST(%)</th>			
+										<th>Quantity</th>
+										<th>MRP</th>
+										<th>Net Amount</th>
+										<th class="action">Action</th>
+									</tr>
+								</thead>
+								<tbody id="contentone">
+									<tr ng-repeat="data in selectedNewProductList">
+										<td style="padding:4px 8px 4px 8px;" align="center">{{$index+1}}</td>
+										<td style="padding:4px 8px 4px 8px; font-size:10pt;" >{{data.pm_product_name}} ({{data.pm_product_color_code}})<br>  <span style="font-size: 9pt;">size : {{data.pm_product_size}}</span></td>
+										<!-- <td style="padding:4px 8px 4px 8px;">{{data.pm_product_name}}</td>
+										<td style="padding:4px 8px 4px 8px;">{{data.pm_product_color_code}}</td>
+										<td style="padding:4px 8px 4px 8px;">{{data.pm_product_size}}</td>
+										<td style="padding:4px 8px 4px 8px;">{{data.um_name}}</td> -->
+										<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_product_hsn}}</td>
+										<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.discount > 0">{{data.spum_discount}}%</td>
+										<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_product_cgst}}%</td>
+										<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_product_sgst}}%</td>
+										<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_product_igst}}%</td>
+										<td style="padding:4px 8px 4px 8px;" align="center">
+											<span class="printshow">
+											{{data.btpm_product_quantity}} {{data.um_name}}
+											</span>
+											<span class="print-hide">
+												<input type="number" id="btpm_product_quantity" class="form-control" ng-model="data.btpm_product_quantity"  ng-change="calculateTotal()"/>
+											</span>
+										</td>
+										<td style="padding:4px 8px 4px 8px;">{{data.ppm_product_mrp}}</td>
+										<td style="padding:4px 8px 4px 8px;" align="center">{{data.netamt | number:2}}</td>
+										<!-- <td style="padding:4px 8px 4px 8px;">
+											<span class="printshow">
+											{{data.ppm_mrp}}
+											</span>
+											<span class="print-hide">
+												<input type="text" id="ppm_mrp" class="form-control" ng-model="data.ppm_mrp"/>
+											</span>
+										</td> -->	
+										<td style="padding:4px 8px 4px 8px;" class="action"><button  class="btn btn-outline btn-danger" type="submit" id="btnAddItemLine" ng-click="removeNewItem($index)"><i class="fa fa-minus-square" aria-hidden="true"></i></button></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+					<div class="col-lg-12">
+						<div class="col-sm-2"><label>Comment </label></div>
+						<div class="col-sm-6"><textarea id="comment" class="form-control" ng-model="sale.srm_comment" rows="1"></textarea></div>
+						<div class="col-sm-2"><label>Net Amount </label></div>
+						<div class="col-sm-2"><label class="form-control">{{sale.amount | number : 2}}</label></div>
+						<div class="col-sm-2 col-sm-offset-8"><label>Disc {{sale.disper}}%</label></div>
+						<div class="col-sm-2"><label class="form-control">{{sale.discount | number : 2}}</label></div>
+						<div class="col-sm-2 col-sm-offset-8" ng-if="sale.com_is_composition == 0"><label>CGST </label></div>
+						<div class="col-sm-2" ng-if="sale.com_is_composition == 0"><label class="form-control">{{sale.cgst | number : 2}}</label></div>
+						<div class="col-sm-2 col-sm-offset-8" ng-if="sale.com_is_composition == 0"><label>SGST </label></div>
+						<div class="col-sm-2" ng-if="sale.com_is_composition == 0"><label class="form-control">{{sale.sgst | number : 2}}</label></div>
+						<div class="col-sm-2 col-sm-offset-8" ng-if="sale.com_is_composition == 0"><label>IGST </label></div>
+						<div class="col-sm-2" ng-if="sale.com_is_composition == 0"><label class="form-control">{{sale.igst | number : 2}}</label></div>
+						<div class="col-sm-2 col-sm-offset-8"><label>Rounding Off </label></div>
+						<div class="col-sm-2"><label class="form-control">{{sale.roundoff | number : 2}}</label></div>
+						<div class="col-sm-2 col-sm-offset-8"><label>Total Amount </label></div>
+						<div class="col-sm-2"><label id="sm_amount" class="form-control">{{sale.srm_amount | number : 2}}</label></div>
+					</div>
+				    <div class="col-lg-12">
+						<button  class="btn btn-outline btn-success" type="submit" id="btnsave" ng-click="saveData()">SAVE <span class="label label-success">alt+s</span></button>
+				    	<button  class="btn btn-outline btn-danger" type="button" onclick="window.location = '#/salereturn'" id="btncancel">Back</button>
+				    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

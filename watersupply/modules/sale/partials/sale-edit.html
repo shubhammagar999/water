@@ -1,0 +1,859 @@
+<style>
+ .printshow{display:none;}
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Edit Sale</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="row">
+							<div class="col-lg-5">
+								<div class="row">
+								    <div class="col-lg-6">
+				                        <div class="form-group">
+				                            <label>Serial no</label>
+				                            <input type="text" id="sm_invoice_no" class="form-control" ng-model="sale.sm_invoice_no" readonly="readonly"/>
+				                        </div>
+				                    </div>
+								    <div class="col-lg-6">
+				                        <div class="form-group input-group">
+				                            <label>Date</label>
+				                            <div class="form-group input-group">
+					                            <input type="text" class="form-control" id="pDate" ng-model="sale.sm_date" readonly="readonly">
+					                            <span class="input-group-btn">
+					                                <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i>
+					                                </button>
+					                            </span>
+					                        </div>
+				                        </div>
+				                    </div>
+								</div>
+							</div>
+							<div class="col-lg-7">
+								<div class="row">
+								    <!-- <div class="col-lg-4">
+				                        <div class="form-group input-group">
+				                            <label>Delivery Date</label>
+				                            <div class="form-group input-group">
+					                            <input type="text" class="form-control" id="deliveryDate" ng-model="sale.sm_del_date" readonly="readonly">
+					                            <span class="input-group-btn">
+					                                <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i>
+					                                </button>
+					                            </span>
+					                        </div>
+				                        </div>
+				                    </div> -->
+			                    	<div class="col-lg-4">
+			                        	<label>Delivery Date</label>
+										<div class="row">
+					                    	<div class="col-lg-2">
+						                        <div class="form-group input-group">
+						                            <div class="input-group">
+							                            <input type="checkbox" id="deliveryCheck" ng-model="sale.sm_del_check">
+							                        </div>
+						                        </div>
+						                    </div>
+					                        <div class="col-lg-10" id="deldateshow">
+						                        <div class="form-group input-group">
+						                            <!-- <label>Delivery Date</label> -->
+						                            <div class="form-group input-group">
+							                            <input type="text" class="form-control" id="deliveryDate" ng-model="sale.sm_del_date" readonly="readonly">
+							                            <span class="input-group-btn">
+							                                <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i>
+							                                </button>
+							                            </span>
+							                        </div>
+						                        </div>
+						                    </div>
+			                    		</div>
+			                		</div>
+								    <div class="col-lg-4">
+				                        <div class="form-group">
+				                            <label>Credit / Cash / Card</label>
+				                            <select class="form-control" id="invoiceType" ng-change="creditShow()" ng-model="sale.sm_payment_mode">
+				                                <!-- <option value="" disabled>Select credit / cash</option> -->
+				                                <option>credit</option>
+				                                <option>cash</option>
+			                                	<option>card</option>
+				                            </select>
+				                        </div>
+				                    </div>
+								    <div class="col-lg-4" id="paymentdate">
+				                        <div class="form-group input-group">
+				                            <label>Payment Receive Date</label>
+				                            <div class="form-group input-group">
+					                            <input type="text" class="form-control" id="expectedDate" ng-model="sale.sm_payment_date" readonly="readonly">
+					                            <span class="input-group-btn">
+					                                <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i>
+					                                </button>
+					                            </span>
+					                        </div>
+				                        </div>
+			                    	</div>
+								</div>
+							</div>
+						</div>
+	                </div>
+	                <div class="row">
+	                <div class="col-lg-12">
+					    <div class="col-lg-3">
+	                        <div class="form-group">
+	                            <label>Debtors</label>
+	                            <input type="text"
+	                                id="sm_cm_id"
+	                                ng-model="sale.sm_cm"
+	                                typeahead="obj as obj.cm_search for obj in getSearchCust($viewValue)"
+	                                typeahead-loading="loadingCustList"
+	                                typeahead-no-results="noCustListResults"
+	                                class="form-control">
+	                            <i ng-show="loadingCustList" class="glyphicon glyphicon-refresh"></i>
+	                            <div ng-show="noCustListResults">
+	                                <i class="glyphicon glyphicon-remove"></i> No Results Found
+	                            </div>
+	                        </div>
+	                    </div>
+					    <div class="col-lg-2">
+	                        <div class="form-group">
+	                            <label>Salesman</label>
+	                            <input type="text"
+	                                id="sm_emp_id"
+	                                ng-model="sale.sm_emp"
+	                                typeahead="obj as obj.emp_name for obj in getSearchEmp($viewValue)"
+	                                typeahead-loading="loadingEmpList"
+	                                typeahead-no-results="noEmpListResults"
+	                                class="form-control">
+	                            <i ng-show="loadingEmpList" class="glyphicon glyphicon-refresh"></i>
+	                            <div ng-show="noEmpListResults">
+	                                <i class="glyphicon glyphicon-remove"></i> No Results Found
+	                            </div>
+	                        </div>
+	                    </div>
+					     <div class="col-lg-3">
+	                        <div class="form-group">
+	                            <label>Order No</label>
+	                            <input type="text" id="sm_buyer_no" class="form-control" ng-model="sale.sm_buyer_no"/>
+	                        </div>
+	                    </div>
+	                    <div class="col-lg-3">
+	                        <div class="form-group pull-right"><br>
+								<button  class="btn btn-outline btn-info" type="submit" id="btnAddItem" ng-click="openCustomerForm()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Debtors</button>
+								<button  class="btn btn-outline btn-primary" type="submit" id="btnAddItema" ng-click="openEmployeeForm()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Employee</button>
+							</div>
+						</div>
+	                    <div class="col-lg-1">
+	                        <div class="form-group">
+								<label>Unsorted Product</label><br>
+                				<input type="checkbox" id="is_true" ng-change="checkIsTrue()" ng-model="sale.is_true" />
+							</div>
+						</div>
+	                </div>
+					</div>
+					<div class="row">
+					<div class="col-lg-12">
+						<div class="col-lg-2">
+	                        <div class="form-group">
+	                            <label>Product Code</label> 
+	                            <input type="text"
+	                                id="pm_id"
+	                                ng-model="productObj"
+	                                typeahead="obj as obj.pm_search for obj in getSearchPro($viewValue)"
+	                                typeahead-loading="loadingProList"
+	                                typeahead-no-results="noProListResults"
+	                                typeahead-on-select="setItemDetails(productObj)"
+	                                class="form-control">
+	                            <i ng-show="loadingProList" class="glyphicon glyphicon-refresh"></i>
+	                            <div ng-show="noProListResults">
+	                                <i class="glyphicon glyphicon-remove"></i> No Results Found
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <div class="col-lg-2">
+	                        <div class="form-group">
+	                            <label>Product</label> 
+	                            <label class="form-control">{{productObj.pm_name}}</label> 
+		                            <!-- <input type="text" id="pm_color_code" class="form-control" ng-model="productObj.pm_color_code" readonly/> -->
+	                        </div>
+	                    </div>
+	                    <div class="col-lg-2">
+	                        <div class="form-group">
+	                            <label>Design No</label> 
+	                            <label class="form-control">{{productObj.pm_color_code}}</label> 
+		                            <!-- <input type="text" id="pm_color_code" class="form-control" ng-model="productObj.pm_color_code" readonly/> -->
+	                        </div>
+	                    </div>
+	                    <div class="col-lg-2">
+	                        <div class="form-group">
+	                            <label>Unit Name</label>
+	                            <!-- <input type="text"
+	                                id="pm_um_id"
+	                                ng-model="productObj.pm_um_id"
+	                                typeahead="obj as obj.um_name for obj in getSearch($viewValue)"
+	                                typeahead-loading="loadingList"
+	                                typeahead-no-results="noListResults"
+                                     typeahead-on-select="getUnitDetails()"
+	                                class="form-control">
+	                            <i ng-show="loadingList" class="glyphicon glyphicon-refresh"></i>
+	                            <div ng-show="noListResults">
+	                                <i class="glyphicon glyphicon-remove"></i> No Results Found
+	                            </div> -->
+	                            <label class="form-control">{{productObj.pm_unit_name}}</label> 
+		                            <!-- <input type="text" id="pm_unit_name" class="form-control" ng-model="productObj.pm_unit_name" readonly/> -->
+	                        </div>
+                    	</div>
+        				<div class="col-lg-2">
+        					<div class="form-group">
+	                            <label>Size</label> 
+	                            <label class="form-control">{{productObj.pm_size}}</label>
+	                        </div>
+        				</div>
+						<div class="col-lg-2">
+	                        <div class="form-group">
+	                            <label>HSN</label>
+	                            <label class="form-control">{{productObj.pm_hsn}}</label> 
+	                            <!-- <input type="text" id="pm_hsn" class="form-control" ng-model="productObj.pm_hsn" readonly /> -->
+	                        </div>
+	                    </div>
+                    	<!-- <div class="col-lg-2"  ng-if="sale.com_is_composition == 0">
+	                        <div class="form-group">
+	                            <label>Disc (%)</label>
+	                            <input type="number" id="pm_discount" class="form-control" ng-model="productObj.pm_discount" />
+	                        </div>
+	                    </div> -->
+	                </div>
+	            	</div>
+	            	<div class="row">
+					<div class="col-lg-12">
+						<div class="col-lg-5" ng-if="sale.com_is_composition == 0">
+							<div class="col-lg-4">
+		                        <div class="form-group">
+		                            <label>CGST (%)</label>
+	                            <label class="form-control">{{productObj.pm_cgst}}</label> 
+		                            <!-- <input type="number" id="pm_cgst" class="form-control" ng-model="productObj.pm_cgst" /> -->
+		                        </div>
+		                    </div>
+							<div class="col-lg-4">
+		                        <div class="form-group">
+		                            <label>SGST (%)</label>
+	                            <label class="form-control">{{productObj.pm_sgst}}</label> 
+		                            <!-- <input type="number" id="pm_sgst" class="form-control" ng-model="productObj.pm_sgst" /> -->
+		                        </div>
+		                    </div>
+							<div class="col-lg-4">
+		                        <div class="form-group">
+		                            <label>IGST (%)</label>
+	                            <label class="form-control">{{productObj.pm_igst}}</label> 
+		                            <!-- <input type="number" id="pm_igst" class="form-control" ng-model="productObj.pm_igst" /> -->
+		                        </div>
+		                    </div>
+	                    </div>
+						<div class="col-lg-2">
+	                        <div class="form-group">
+	                            <label>Quantity</label>
+	                            <input type="number" id="btpm_quantity" class="form-control" ng-model="productObj.btpm_quantity" />
+	                        </div>
+	                    </div>
+						<div class="col-lg-2">
+	                        <div class="form-group">
+	                            <label>MRP</label>
+	                            <label class="form-control">{{productObj.ppm_mrp}}</label> 
+	                            <!-- <input type="number" id="ppm_mrp" class="form-control" ng-model="productObj.ppm_mrp" readonly/> -->
+	                        </div>
+	                    </div>
+						<div class="col-lg-2">
+	                        <div class="form-group">
+	                            <label>Total</label>
+	                            <label class="form-control" ng-hide="productObj.btpm_quantity==undefined">{{
+	                            ((parseFloat(productObj.btpm_quantity * productObj.ppm_mrp) - 
+	                            parseFloat(productObj.btpm_quantity * productObj.ppm_mrp) * 
+	                            (productObj.pm_discount/100)))	 | number:2}}</label>
+	                            <label class="form-control" ng-hide="productObj.btpm_quantity!=undefined">0</label>
+	                        </div>
+	                    </div>
+						<div class="col-lg-1"><br>
+							<button  class="btn btn-outline btn-success" type="submit" id="btnAddCart" ng-click="addToCart();"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add</button>
+						</div>
+					</div>
+					</div>
+					<div class="col-lg-12">
+						<table class="table" border="1">
+							<thead>
+								<tr>  
+									<th colspan="14"  class="text-center" style="background-color:#EEEEEE;border:solid 1px;">Bill Of Selected Product</th>
+								</tr>
+								<tr>      
+									<th>Sr. No.</th>
+									<th>Description of Goods</th>
+									<!-- <th>Code</th>		 -->
+									<!-- <th>Product</th> -->
+									<!-- <th>Design No</th>	 -->
+									<!-- <th>Unit</th> -->
+									<th ng-if="sale.com_is_composition == 0">HSN</th>
+									<th ng-if="sale.discount > 0">Disc(%)</th>
+									<th ng-if="sale.com_is_composition == 0">CGST(%)</th>
+									<th ng-if="sale.com_is_composition == 0">SGST(%)</th>
+									<th ng-if="sale.com_is_composition == 0">IGST(%)</th>			
+									<th>Quantity</th>
+									<th>MRP</th>
+									<th>Net Amount</th>
+									<th class="action">Action</th>
+								</tr>
+							</thead>
+							<tbody id="content">
+								<tr ng-repeat="data in selectedProductList track by $index">
+									<td style="padding:4px 8px 4px 8px;" align="center">{{data.srno}}</td>
+									<td style="padding:4px 8px 4px 8px;">{{data.pm_name}}({{data.pm_color_code}})<br>Code: {{data.ppm_code}} <br> Size:{{data.ppm_size}}</td>
+									<!-- <td style="padding:4px 8px 4px 8px;">{{data.ppm_code}}</td>
+									<td style="padding:4px 8px 4px 8px;">{{data.pm_name}}</td> -->
+
+									<!-- <td style="padding:4px 8px 4px 8px;">{{data.ppm_description}} ({{data.ctm_type.ctm_type}})</td> -->
+									<!-- <td style="padding:4px 8px 4px 8px;">{{data.pm_color_code}}</td> -->
+									<!-- <td style="padding:4px 8px 4px 8px;">{{data.pm_unit_name}}</td> -->
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_hsn}}</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.discount > 0">{{sale.disper}}%</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_cgst}}%</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_sgst}}%</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_igst}}%</td>
+									<td style="padding:4px 8px 4px 8px;" align="center">
+										<span class="printshow">
+										{{data.btpm_quantity}}
+										</span>
+										<span class="print-hide">
+											<input type="number" id="btpm_quantity" class="form-control" ng-model="data.btpm_quantity"  ng-change="calculateTotal()"/>
+										</span>
+									</td>
+									<td style="padding:4px 8px 4px 8px;">{{data.ppm_mrp}}</td>
+									<td style="padding:4px 8px 4px 8px;" align="center">{{data.netamt | number:2}}</td>
+									<!-- <td style="padding:4px 8px 4px 8px;">
+										<span class="printshow">
+										{{data.ppm_mrp}}
+										</span>
+										<span class="print-hide">
+											<input type="text" id="ppm_mrp" class="form-control" ng-model="data.ppm_mrp"/>
+										</span>
+									</td> -->	
+									<td style="padding:4px 8px 4px 8px;" class="action"><button  class="btn btn-outline btn-danger" type="submit" id="btnAddItemLine" ng-click="removeItem($index)"><i class="fa fa-minus-square" aria-hidden="true"></i></button></td>
+								</tr>
+
+								<tr ng-repeat="data in selectedProductListAdd track by $index">
+									<td style="padding:4px 8px 4px 8px;" align="center">{{data.srno}}</td>
+
+									<td style="padding:4px 8px 4px 8px;">{{data.pm_name}}({{data.pm_color_code}})<br>Code: {{data.ppm_code}} <br> Size:{{data.ppm_size}}</td>
+									<!-- <td style="padding:4px 8px 4px 8px;">{{data.ppm_code}}</td>
+									<td style="padding:4px 8px 4px 8px;">{{data.pm_name}}</td> -->
+
+									<!-- <td style="padding:4px 8px 4px 8px;">{{data.ppm_description}} ({{data.ctm_type.ctm_type}})</td> -->
+									<!-- <td style="padding:4px 8px 4px 8px;">{{data.pm_color_code}}</td>
+									<td style="padding:4px 8px 4px 8px;">{{data.pm_unit_name}}</td> -->
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_hsn}}</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.discount > 0">{{sale.disper}}%
+									</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_cgst}}%</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_sgst}}%</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_igst}}%</td>
+									<td style="padding:4px 8px 4px 8px;" align="center">
+										<span class="printshow">
+										{{data.btpm_quantity}}
+										</span>
+										<span class="print-hide">
+											<input type="number" id="btpm_quantity" class="form-control" ng-model="data.btpm_quantity"  ng-change="calculateTotal()"/>
+										</span>
+									</td>
+									<td style="padding:4px 8px 4px 8px;">{{data.ppm_mrp}}</td>
+									<td style="padding:4px 8px 4px 8px;" align="center">{{data.netamt | number:2}}</td>
+									<!-- <td style="padding:4px 8px 4px 8px;">
+										<span class="printshow">
+										{{data.ppm_mrp}}
+										</span>
+										<span class="print-hide">
+											<input type="text" id="ppm_mrp" class="form-control" ng-model="data.ppm_mrp"/>
+										</span>
+									</td> -->	
+									<td style="padding:4px 8px 4px 8px;" class="action"><button  class="btn btn-outline btn-danger" type="submit" id="btnAddItemLine" ng-click="removeItemAdd($index)"><i class="fa fa-minus-square" aria-hidden="true"></i></button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<!-- ALL DETAILS ON TYPE -->
+				<div id=newProductAdd>
+					<div class="col-lg-12">
+	                    <div class="col-lg-12">
+	                    	<div class="row">
+	                    		<div class="col-lg-6">
+	                    			<div class="row">
+	                    				<div class="col-lg-4">
+					                        <div class="form-group">
+					                            <label>Unit Name</label> 
+					                            <input type="text"
+					                                id="um_id"
+					                                ng-model="newproductObj"
+					                                typeahead="obj as obj.um_name for obj in getSearchUnit($viewValue)"
+					                                typeahead-loading="loadingUnitList"
+					                                typeahead-no-results="noUnitListResults"
+					                                class="form-control">
+					                            <i ng-show="loadingUnitList" class="glyphicon glyphicon-refresh"></i>
+					                            <div ng-show="noUnitListResults">
+					                                <i class="glyphicon glyphicon-remove"></i> No Results Found
+					                            </div>
+					                        </div>
+					                    </div>
+	                    				<div class="col-lg-4">
+	                    					<div class="form-group">
+					                            <label>Product Name</label>  
+	                            				<input type="text" id="pm_product_name" class="form-control" ng-model="newproductObj.pm_product_name" />
+					                        </div>
+	                    				</div>
+	                    				<div class="col-lg-4">
+					                        <div class="form-group">
+					                            <label>Design No</label>
+	                            				<input type="text" id="pm_product_color_code" class="form-control" ng-model="newproductObj.pm_product_color_code" />
+					                        </div>
+	                    				</div>
+	                    			<!-- 	<div class="col-lg-4">
+	                    					<div class="form-group">
+					                            <label>Unit Name</label>
+		                            			<input type="text" id="pm_product_unit_name" class="form-control" ng-model="newproductObj.pm_product_unit_name" />
+					                        </div>
+	                    				</div> -->
+	                    			</div>
+	                    		</div>
+	                    		<div class="col-lg-6">
+	                    			<div class="row">
+	                    				<div class="col-lg-4">
+	                    					<div class="form-group">
+					                            <label>Size</label> 
+						                        <input type="text" id="pm_product_size" class="form-control" ng-model="newproductObj.pm_product_size" />
+					                        </div>
+	                    				</div>
+	                    				<div class="col-lg-4">
+	                    					<div class="form-group">
+				                            <label>HSN</label>
+	                            			<input type="text" id="pm_product_hsn" class="form-control" ng-model="newproductObj.pm_product_hsn"  />
+				                        </div>
+	                    				</div>
+	                    				<!-- <div class="col-lg-4">
+					                        <div class="form-group">
+					                            <label>Disc (%)</label>
+	                            				<input type="number" id="pm_product_discount" class="form-control" ng-model="newproductObj.pm_product_discount" />
+					                        </div>
+	                    				</div> -->
+	                    			</div>
+	                    		</div>
+	                    	</div>
+	                    </div>
+	                </div>
+	                <div class="col-lg-12">
+	                	<div class="col-lg-6">
+	                		<div class="row">
+	                			<div class="col-lg-4">
+			                        <div class="form-group">
+			                            <label>CGST (%)</label>
+			                            <input type="number" id="pm_product_cgst" class="form-control" ng-model="newproductObj.pm_product_cgst" /> 
+			                        </div>
+	                			</div>
+	                			<div class="col-lg-4">
+			                        <div class="form-group">
+			                            <label>SGST (%)</label>
+			                            <input type="number" id="pm_product_sgst" class="form-control" ng-model="newproductObj.pm_product_sgst" />
+			                        </div>
+			                    </div>
+	                			<div class="col-lg-4">
+			                        <div class="form-group">
+			                            <label>IGST (%)</label>
+			                            <input type="number" id="pm_product_igst" class="form-control" ng-model="newproductObj.pm_product_igst" />
+			                        </div>
+	                			</div>
+	                		</div>
+	                	</div>
+	                	<div class="col-lg-6">
+	                		<div class="row">
+	                			<div class="col-lg-3">
+			                        <div class="form-group">
+			                            <label>Quantity</label>
+		                            <input type="number" id="btpm_product_quantity" class="form-control" ng-model="newproductObj.btpm_product_quantity" />
+			                        </div>
+	                			</div>
+	                			<div class="col-lg-3">
+			                        <div class="form-group">
+			                            <label>MRP</label>
+		                            	<input type="number" id="ppm_product_mrp" class="form-control" ng-model="newproductObj.ppm_product_mrp" />
+			                        </div>
+	                			</div>
+	                			<div class="col-lg-3">
+			                        <div class="form-group">
+			                            <label>Total</label>
+			                            <label class="form-control" ng-hide="newproductObj.btpm_product_quantity==undefined">{{
+			                            ((parseFloat(newproductObj.btpm_product_quantity * newproductObj.ppm_product_mrp)))	 | number:2}}</label>
+			                            <label class="form-control" ng-hide="newproductObj.btpm_product_quantity!=undefined">0</label>
+			                        </div>
+	                			</div>
+	                			<div class="col-lg-3">
+	                				<button style="margin-top: 25px;"  class="btn btn-outline btn-success" type="submit" id="btnAddCart" ng-click="addTotable();"><i class="fa fa-plus-circle" aria-hidden="true" ></i> Add</button>
+	                			</div>
+	                		</div>
+	                	</div>
+	                </div>
+
+	        <!-- TABLE ON TYPE -->
+	        		<div class="col-lg-12">
+						<table class="table" border="1">
+							<thead>
+								<tr>  
+									<th colspan="14"  class="text-center" style="background-color:#EEEEEE;border:solid 1px;">Bill Of Unsorted Product</th>
+								</tr>
+								<tr>      
+									<th>Sr. No.</th>
+									<th>Description of Goods</th>
+									<!-- <th>Product</th> -->
+									<!-- <th>Design No</th>	 -->
+									<!-- <th>Unit</th>	 -->
+									<!-- <th>Size</th> -->
+									<th ng-if="sale.com_is_composition == 0">HSN</th>
+									<th ng-if="sale.discount > 0">Disc(%)</th>
+									<th ng-if="sale.com_is_composition == 0">CGST(%)</th>
+									<th ng-if="sale.com_is_composition == 0">SGST(%)</th>
+									<th ng-if="sale.com_is_composition == 0">IGST(%)</th>
+									<th>Quantity</th>
+									<th>MRP</th>
+									<th>Net Amount</th>
+									<th class="action">Action</th>
+								</tr>
+							</thead>
+							<tbody id="content">
+								<tr ng-repeat="data in selectedNewProductList track by $index">
+									<td style="padding:4px 8px 4px 8px;" align="center">{{data.srno}}</td>
+									<td style="padding:4px 8px 4px 8px;">{{data.pm_product_name}}({{data.pm_product_color_code}})<br>Size: {{data.pm_product_size}}</td>
+									<!-- <td style="padding:4px 8px 4px 8px;">{{data.ppm_description}} ({{data.ctm_type.ctm_type}})</td> -->
+									<!-- <td style="padding:4px 8px 4px 8px;">{{data.pm_product_color_code}}</td>
+									<td style="padding:4px 8px 4px 8px;">{{data.um_name}}</td>
+									<td style="padding:4px 8px 4px 8px;">{{data.pm_product_size}}</td> -->
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_product_hsn}}</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.discount > 0">{{sale.disper}}%
+									</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_product_cgst}}%</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_product_sgst}}%</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_product_igst}}%</td>
+									<td style="padding:4px 8px 4px 8px;" align="center">
+										<span class="printshow">
+										{{data.btpm_product_quantity}}
+										</span>
+										<span class="print-hide">
+											<input type="number" id="btpm_product_quantity" class="form-control" ng-model="data.btpm_product_quantity"  ng-change="calculateTotal()"/>
+										</span>
+									</td>
+									<td style="padding:4px 8px 4px 8px;">{{data.ppm_product_mrp}}</td>
+									<td style="padding:4px 8px 4px 8px;" align="center">{{data.netamt | number:2}}</td>
+									<!-- <td style="padding:4px 8px 4px 8px;">
+										<span class="printshow">
+										{{data.ppm_mrp}}
+										</span>
+										<span class="print-hide">
+											<input type="text" id="ppm_mrp" class="form-control" ng-model="data.ppm_mrp"/>
+										</span>
+									</td> -->	
+									<td style="padding:4px 8px 4px 8px;" class="action"><button  class="btn btn-outline btn-danger" type="submit" id="btnAddItemLine" ng-click="removeNewItem($index)"><i class="fa fa-minus-square" aria-hidden="true"></i></button></td>
+								</tr>
+								<tr ng-repeat="data in selectedNewProductListAdd track by $index">
+									<td style="padding:4px 8px 4px 8px;" align="center"><!-- {{$index+1}} -->{{data.srno}}</td>
+									<td style="padding:4px 8px 4px 8px;">{{data.pm_product_name}}({{data.pm_product_color_code}})<br>Size: {{data.pm_product_size}}</td>
+									<!-- <td style="padding:4px 8px 4px 8px;">{{data.ppm_description}} ({{data.ctm_type.ctm_type}})</td> -->
+									<!-- <td style="padding:4px 8px 4px 8px;">{{data.pm_product_color_code}}</td>
+									<td style="padding:4px 8px 4px 8px;">{{data.um_name}}</td>
+									<td style="padding:4px 8px 4px 8px;">{{data.pm_product_size}}</td> -->
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_product_hsn}}</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.discount > 0">{{sale.disper}}%
+									</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_product_cgst}}%</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_product_sgst}}%</td>
+									<td style="padding:4px 8px 4px 8px;" align="center" ng-if="sale.com_is_composition == 0">{{data.pm_product_igst}}%</td>
+									<td style="padding:4px 8px 4px 8px;" align="center">
+										<span class="printshow">
+										{{data.btpm_product_quantity}}
+										</span>
+										<span class="print-hide">
+											<input type="number" id="btpm_product_quantity" class="form-control" ng-model="data.btpm_product_quantity"  ng-change="calculateTotal()"/>
+										</span>
+									</td>
+									<td style="padding:4px 8px 4px 8px;">{{data.ppm_product_mrp}}</td>
+									<td style="padding:4px 8px 4px 8px;" align="center">{{data.netamt | number:2}}</td>
+									<!-- <td style="padding:4px 8px 4px 8px;">
+										<span class="printshow">
+										{{data.ppm_mrp}}
+										</span>
+										<span class="print-hide">
+											<input type="text" id="ppm_mrp" class="form-control" ng-model="data.ppm_mrp"/>
+										</span>
+									</td> -->	
+									<td style="padding:4px 8px 4px 8px;" class="action"><button  class="btn btn-outline btn-danger" type="submit" id="btnAddItemLine" ng-click="removeNewItemAdd($index)"><i class="fa fa-minus-square" aria-hidden="true"></i></button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+	            </div>
+
+					<div class="col-lg-12">
+						<!-- <div class="col-lg-8">
+							<div class="col-lg-12">
+								<div class="col-sm-4"><label>Comment </label></div>
+								<div class="col-sm-8"><textarea id="comment" class="form-control" ng-model="sale.sm_comment" rows="3"></textarea></div>
+							</div>
+							<br>
+							<div class="col-lg-12">
+								<div class="col-sm-4">
+									<label>Is Ewaybill Applicable </label>
+								</div>
+								<div class="col-sm-8">
+									<input type="checkbox" id="is_eway" ng-model="sale.is_eway_bill" ng-click="getisewaybill()">
+								</div>
+							</div>
+							<div class="col-lg-12" id="eway">
+								<fieldset>
+									<legend style="text-align: center;">E-Way Bill</legend>
+									<div class="col-sm-4"><label>e-Way Bill No. </label></div>
+									<div class="col-sm-8" style="margin-bottom: 10px;"><input type="text" id="sm_eway_bill_no" class="form-control" ng-model="sale.sm_eway_bill_no"/></div>
+									<div class="col-sm-4"><label>Vehicle No. </label></div>
+									<div class="col-sm-8" style="margin-bottom: 10px;"><input type="text" id="sm_vehicle_no" class="form-control" ng-model="sale.sm_vehicle_no"/></div>
+									<div class="col-sm-4"><label>Distance (in KM) </label></div>
+									<div class="col-sm-8" style="margin-bottom: 10px;"><input type="text" id="sm_distance" class="form-control" ng-model="sale.sm_distance"/></div>
+									<div class="col-sm-4"><label>e-Way Bill Date </label></div>
+									<div class="col-sm-8" style="margin-bottom: 10px;"><input type="text" id="sm_eway_bill_date" class="form-control" ng-model="sale.sm_eway_bill_date" readonly /></div>
+								</fieldset>
+							</div>
+						</div> -->
+						<div class="col-lg-4 pull-right">
+							<div class="col-lg-12">
+								<div class="col-sm-6"><label>Net Amount </label></div>
+								<div class="col-sm-6"><label id="sm" class="form-control">{{sale.amount | number : 2}}</label></div>
+							</div>
+							<div class="col-lg-12">
+								<div class="col-sm-6"><label>Disc </label></div>
+								<div class="col-sm-6"><label class="form-control">{{sale.discount | number : 2}}</label></div>
+							</div>
+							<div class="col-lg-12" ng-if="sale.com_is_composition == 0">
+								<div class="col-sm-6"><label>CGST </label></div>
+								<div class="col-sm-6"><label class="form-control">{{sale.cgst | number : 2}}</label></div>
+							</div>
+							<div class="col-lg-12" ng-if="sale.com_is_composition == 0">
+								<div class="col-sm-6"><label>SGST </label></div>
+								<div class="col-sm-6"><label class="form-control">{{sale.sgst | number : 2}}</label></div>
+							</div>
+							<div class="col-lg-12" ng-if="sale.com_is_composition == 0">
+								<div class="col-sm-6"><label>IGST </label></div>
+								<div class="col-sm-6"><label class="form-control">{{sale.igst | number : 2}}</label></div>
+							</div>
+							<div class="col-lg-12" ng-if="sale.com_is_composition == 0">
+								<div class="col-sm-6"><label>Rounding Off </label></div>
+								<div class="col-sm-6"><label class="form-control">{{sale.roundoff | number : 2}}</label></div>
+							</div>
+							<div class="col-lg-12">
+								<div class="col-sm-6"><label>Discount Amount {{sale.disper}}% (-)</label></div>
+								<div class="col-sm-6"><b><input type="number" id="sm_discount" class="form-control" ng-model="sale.sm_discount"  ng-blur="discCalculate()"/></b></div>
+							</div>
+							<div class="col-lg-12">
+								<div class="col-sm-6"><label>Other Charges (+)</label></div>
+								<div class="col-sm-6"><b><input type="number" id="sm_other_charges" class="form-control" ng-model="sale.sm_other_charges"  ng-change="calculateTotal()"/></b></div>
+							</div>
+							<div class="col-lg-12">
+								<div class="col-sm-6"><label>Total Amount </label></div>
+								<div class="col-sm-6"><label id="sm_amount" class="form-control">{{sale.sm_amount | number : 2}}</label></div>
+							</div>
+							<div class="col-lg-12" id="advance">
+								<div class="col-sm-6"><label>Advance(-)</label></div>
+								<div class="col-sm-6"><b><input type="number" id="sm_advance_amt" class="form-control" ng-model="sale.sm_advance_amt"  ng-change="calculateTotal()"/></b></div>
+							</div>
+							<div class="col-lg-12" id="balance">
+								<div class="col-sm-6"><label>Balance Amount </label></div>
+								<div class="col-sm-6"><label id="sm_balance_amt_new" class="form-control">{{sale.sm_balance_amt_new | number : 2}}</label></div>
+							</div>
+						</div>
+					</div>
+				    <div class="col-lg-12">
+						<button  class="btn btn-outline btn-success" type="submit" id="btnsave" ng-click="saveData()">UPDATE <span class="label label-success">alt+s</span></button>
+				    	<button  class="btn btn-outline btn-danger" type="button" onclick="window.location = '#/sale'" id="btncancel">Back</button>
+				    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- <table>
+	<tr ng-repeat="data in gstProductList" id="contentPrint">
+		<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.pm_hsn}}</td>	
+		<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.taxable_value | number:2}}</td>
+		<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.spm_cgst}}%</td>
+		<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.tax_cgst | number:2}}</td>
+		<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.spm_sgst}}%</td>
+		<td style="padding:4px 8px 4px 8px; font-size:10pt; border-style: none solid none none; border-width:.5px;" align="center">{{data.tax_sgst | number:2}}</td>
+		<td style="padding:4px 8px 4px 8px; font-size:10pt;" align="center">{{parseFloat(data.tax_cgst) + parseFloat(data.tax_sgst) | number:2}}</td>
+	</tr>
+</table> -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="addCustomer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Add New Debtors Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-default">
+		            <div class="panel-body">
+						<div class="row">
+						    <div class="col-lg-6">
+		                        <div class="form-group">
+		                            <label>Name</label>
+		                            <input type="text" id="cm_name" class="form-control" ng-model="customer.cm_name" />
+		                        </div>
+		                    </div>
+		                    <div class="col-lg-6">
+		                        <div class="form-group">
+		                            <label>GST</label>
+		                            <input type="text" id="cm_gst_no" class="form-control" ng-model="customer.cm_gst_no" />
+		                        </div>
+		                    </div>
+		                    <!-- <div class="col-lg-6">
+		                        <fieldset>
+		                            <legend>Registered Address</legend>
+		                            <div class="col-lg-6">
+		                                <div class="form-group">
+		                                    <label>Address</label>
+		                                    <textarea id="cm_address" class="form-control" ng-model="customer.cm_address" rows="1"></textarea>
+		                                </div>
+		                            </div>
+		                            <div class="col-lg-6">
+		                                <div class="form-group">
+		                                    <label>State</label>
+		                                    <input type="text" id="cm_state" class="form-control" ng-model="customer.cm_state" />
+		                                </div>
+		                            </div>
+		                            <div class="col-lg-6">
+		                                <div class="form-group">
+		                                    <label>City</label>
+		                                    <input type="text" id="cm_city" class="form-control" ng-model="customer.cm_city" />
+		                                </div>
+		                            </div>
+		                            <div class="col-lg-6">
+		                                <div class="form-group">
+		                                    <label>Pin Code</label>
+		                                    <input type="text" id="cm_pin" class="form-control" ng-model="customer.cm_pin" />
+		                                </div>
+		                            </div>
+		                        </fieldset>
+		                    </div> -->
+		                    <!-- <div class="col-lg-6">
+		                        <fieldset>
+		                            <legend>Delivery Address <input type="checkbox" id="samecheck" ng-model="customer.samecheck" ng-change="getsamecheck()"> <b style="font-size: 9pt">same as registered address</b></legend>
+		                            <div class="col-lg-6">
+		                                <div class="form-group">
+		                                    <label>Address</label>
+		                                    <textarea id="cm_del_address" class="form-control" ng-model="customer.cm_del_address" rows="1"></textarea>
+		                                </div>
+		                            </div>
+		                            <div class="col-lg-6">
+		                                <div class="form-group">
+		                                    <label>State</label>
+		                                    <input type="text" id="cm_del_state" class="form-control" ng-model="customer.cm_del_state" />
+		                                </div>
+		                            </div>
+		                            <div class="col-lg-6">
+		                                <div class="form-group">
+		                                    <label>City</label>
+		                                    <input type="text" id="cm_del_city" class="form-control" ng-model="customer.cm_del_city" />
+		                                </div>
+		                            </div>
+		                            <div class="col-lg-6">
+		                                <div class="form-group">
+		                                    <label>Pin Code</label>
+		                                    <input type="text" id="cm_del_pin" class="form-control" ng-model="customer.cm_del_pin" />
+		                                </div>
+		                            </div>
+		                        </fieldset>
+		                    </div> -->
+						    <div class="col-lg-6">
+		                        <div class="form-group">
+		                            <label>Contact Number</label>
+		                            <input type="text" id="cm_mobile" class="form-control" ng-model="customer.cm_mobile" />
+		                        </div>
+		                    </div>
+		                    <div class="col-lg-6">
+		                        <div class="form-group">
+		                            <label>E-Mail Id</label>
+		                            <input type="text" id="cm_email" class="form-control" ng-model="customer.cm_email" />
+		                        </div>
+		                    </div>
+		                    <div class="col-lg-6">
+		                        <div class="form-group">
+		                            <label>Address</label>
+		                            <textarea id="cm_address" class="form-control" ng-model="customer.cm_address" rows="1"></textarea>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-outline btn-primary" id="addCust" ng-click="saveCustomer()">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="addEmployee" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Add New Employee Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-default">
+		            <div class="panel-body">
+						<div class="row">
+							<div class="col-lg-6">
+		                        <div class="form-group">
+		                            <label>Name</label>
+		                            <input type="text" id="emp_name" class="form-control" ng-model="employee.emp_name"/>
+		                        </div>
+		                    </div>
+						    <div class="col-lg-6">
+		                        <div class="form-group">
+		                            <label>Mobile</label>
+		                            <input type="text" id="emp_mobile" class="form-control" ng-model="employee.emp_mobile" />
+		                        </div>
+		                    </div>
+						    <div class="col-lg-6">
+		                        <div class="form-group">
+		                            <label>Address</label>
+		                            <textarea id="emp_address" class="form-control" ng-model="employee.emp_address" rows="1"></textarea>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-outline btn-primary" id="addEmp" ng-click="saveEmployee()">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

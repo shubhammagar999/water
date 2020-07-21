@@ -1,0 +1,215 @@
+<style type="text/css">
+	 .printshow{display:none;}
+</style>
+<div class="row" ng-init="getAll();">
+    <div class="col-lg-12">
+        <h1 class="page-header">Sale List</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div align="center" v-align="bottom" ng-hide="loading1 == 1" style="margin: auto; height:400px;">
+    <img src="resources/images/reload.gif" style="margin-top: 170px; height: 60px;width: 60px;">
+</div>
+<div class="row" ng-show="loading1 == 1">
+	<div class="col-lg-12">
+	    <div class="panel panel-default">
+            <div class="panel-body">
+            	<div class="row">
+		        	<div class="col-lg-12">
+		            	<input type="text" class="form-control" id="searchtext" ng-model="searchtext" onkeyup="angular.element(this).scope().getSearch();" placeholder = "Search by - Invoice No,Amount"/>
+		            </div>
+		        </div>
+		        <br>
+                <div class="row" id="addrecord">
+                    <center><p>No record available please add new sale</p><br><a class="btn btn-outline btn-info" href="#/sale/add">Add</a></center>
+                </div>
+                <div class="table-responsive" id="checkrecord">
+                    <table class="table table-striped">
+                        <thead>
+							<tr>
+								<th>Invoice no</th>
+								<th>Client</th>
+								<th>Date</th>
+								<th>Billing Date</th>
+
+								<th>Total Amt</th>
+								<th>Amt Paid</th>
+								<th>Balance Amt</th>
+								<!-- <th>Advance</th> -->
+								<!-- <th>Balance</th> -->
+								<!-- <th>Credit Amount</th> -->
+								<th>Status</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="sale in filteredTodos | filter : sale">
+								<td>{{sale.sm_invoice_no}}</td>
+								<td>{{sale.cm_name}} ({{sale.cm_address}})</td>
+								<td>{{sale.sm_date | date : 'dd-MM-yyyy'}}</td>
+								<td>{{sale.sm_from_date | date : 'dd-MM-yyyy'}} - {{sale.sm_to_date | date : 'dd-MM-yyyy'}}</td>
+
+								<td>{{sale.sm_amount | number:2}}</td>
+								<td>{{sale.sm_advance_amt | number:2}}</td>
+								<td>{{sale.sm_balance_amt | number:2}}</td>
+								<!-- <td>{{sale.sm_advance_amt}}</td> -->
+								<!-- <td>{{sale.sm_balance_amt}}</td> -->
+
+								<td ng-if="sale.sm_bill_status == 'pending'" class="text-danger"><b>Pending</b></td>
+								<td ng-if="sale.sm_bill_status == 'paid'" class="text-success"><b>Paid</b></td>
+								<td ng-if="sale.sm_bill_status == 'cancel'" class="text-danger"><b>Cancelled</b></td>
+
+								<!-- <td>{{sale.sm_balance_amount}}</td> -->
+								<td ng-if="sale.sm_status==0 && sale.sm_bill_status == 'paid'">
+									<i class="fa fa-info-circle" ng-click="viewSaleDetails($index)"></i>
+									<!-- <a href="#/sale/edit/{{sale.sm_id}}"><i class="fa fa-pencil"></i></a> -->
+									<!-- <i class="fa fa-ban" ng-click="deleteSale(sale)"></i> -->
+								</td>
+								<td ng-if="sale.sm_status==0 && sale.sm_bill_status == 'pending'">
+									<i class="fa fa-info-circle" ng-click="viewSaleDetails($index)"></i>
+									<a href="#/sale/edit/{{sale.sm_id}}"><i class="fa fa-pencil"></i></a>
+								</td>
+
+								<td ng-if="sale.sm_status==1">
+									<i class="fa fa-info-circle" ng-click="viewSaleDetails($index)"></i>
+								</td>
+
+							</tr>
+						</tbody>	
+                    </table>
+                    <br>
+                    <span id="pagination_detail" ng-show="filteredTodos.length > 0" class="pagination_ds">Showing {{ filterUserend }} to {{filterUser}} of {{saleListcount}} Sale's </span>
+				    <span id="pagination_div" align="right" ng-show="filteredTodos.length > 0"
+				          style="float: right;margin-top: -27px;">
+				      <pagination
+				              ng-model="currentPage"
+				              total-items="saleListcount"
+				              max-size="maxSize"
+				              boundary-links="true" data-num-pages="noOfPages"
+				              items-per-page="numPerPage">
+				      </pagination>
+			    	</span>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+	    </div>
+	    <!-- /.panel -->
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+
+<div class="modal fade" id="view-details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+             
+                <h4 class="modal-title" id="myModalLabel">Sale Details</h4>
+            	<!-- <h5 class="pull-right">Status : 
+								<b>
+									<p ng-if="sales.sm_bill_status == 'pending'" class="text-success">Pending</p>
+									<p ng-if="sales.sm_bill_status == 'paid'" class="text-danger">Paid</p>
+									<p ng-if="sales.sm_bill_status == 'cancel'" class="text-success">Cancelled</p>
+								</b>
+							</h5> -->
+               
+            </div>
+            <div class="modal-body">
+                <table class="table">
+            		<tr>
+            			<td>Serial No : <strong>{{sales.sm_invoice_no}}</strong></td>
+            			<td>Date : <strong>{{sales.sm_date | date :  "dd-MM-yyyy"}}</strong></td>
+            			<td colspan="2" style="word-wrap: break-word;">Vendor : <strong>{{sales.cm_name}} ({{sales.cm_address}} {{sales.cm_state}} {{sales.cm_city}} {{sales.cm_pin}})</strong></td>
+            				
+            		</tr>
+            		<tr>
+            			<td>From Date : <strong>{{sales.sm_from_date | date :  "dd-MM-yyyy"}}</strong></td>
+            			<td>To Date : <strong>{{sales.sm_to_date | date :  "dd-MM-yyyy"}}</strong></td>
+            			<td>Amount : <strong>{{sales.sm_amount}}</strong></td>
+            			<td>Status : 
+							<strong ng-if="sales.sm_bill_status == 'pending'" class="text-danger">Pending</strong>
+							<strong ng-if="sales.sm_bill_status == 'paid'" class="text-success">Paid</strong>
+							<strong ng-if="sales.sm_bill_status == 'cancel'" class="text-danger">Cancelled</strong>
+						</td>
+            		</tr>
+            		<tr>
+            			<td>Total Enteries : <strong>{{saleProductList.length}}</strong></td>
+            			<td>Total Filled : <strong>{{sm_qty_filled}}</strong></td>
+            			<td>Total Empty : <strong>{{sm_qty_empty}}</strong></td>
+            			<td>Price / Pcs : <strong>{{sales.sm_prod_price}}</strong></td>
+            			
+            		</tr>
+            		<tr ng-if="sales.sm_bill_status == 'paid'">
+
+            			<td>Payment Date : <strong>{{sales.sm_payment_date | date :  "dd-MM-yyyy"}}</strong></td>
+            			<td>Amt Paid (pay-mode): <strong>{{sales.sm_advance_amt}} ({{sales.sm_payment_mode}})</strong></td>
+            			<td>Balance Amt : <strong>{{sales.sm_balance_amt}}</strong></td>
+            			<td style="word-wrap: break-word;">Note : <strong>{{sales.sm_comment}}</strong></td>
+
+            			
+            		</tr>
+            	</table>
+            	<table class="table" border="1">
+				 <!-- <table class="table table-hover"> -->
+			                        <thead>
+										<tr>
+											<th>Sr No.</th>
+											<th>Date</th>
+											<th>Filled</th>
+											<th>Empty</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="view in saleProductList | filter : view.pm_date">
+											<td>{{$index + 1}}.</td>
+											<td>{{view.pm_date | date : 'dd-MM-yyyy'}}</td>
+											<td>{{view.pm_qty_filled}}</td>
+											<td class="">{{view.pm_qty_empty}}</td>
+										</tr>
+									</tbody>
+									<tbody class="printshow" id="content">
+										<tr ng-repeat="view in saleProductList | filter : view.pm_date">
+											<td style="padding:1px 8px 1px 8px;" align="center">{{$index + 1}}.</td>
+											<td style="padding:1px 8px 1px 8px;">{{view.pm_date | date : 'dd-MM-yyyy'}}</td>
+											<td style="padding:1px 8px 1px 8px;" align="center">{{sales.sm_prod_price}}</td>
+											<td style="padding:1px 8px 1px 8px;" align="center">{{view.pm_qty_filled}}</td>
+											<td style="padding:1px 8px 1px 8px;" align="center">{{view.pm_qty_filled * sales.sm_prod_price}}</td>
+										</tr>
+									</tbody>
+			                    </table>
+				
+            </div>
+            <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-primary" ng-click="printDetails();">Print</button> -->
+                <button type="button" class="btn btn-primary" ng-click="printDetails();">Print</button>
+                <!-- <button type="button" class="btn btn-info" id="sendemails" ng-click="sendEmail();">E-Mail</button> -->
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+
+<div class="modal fade" id="repoen-confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Reopen Cancel Invoice</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure to reopen the cancel invoice ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline btn-success btn-ok" id="reopen" ng-click="reopenConfirm()">Reopen</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- /.modal -->

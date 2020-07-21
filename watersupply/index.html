@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="3ctledger">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Water Supply </title>
+    <link rel="icon" href="resources/images/gallon.png" type="image/gif" sizes="10x10">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="resources/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="resources/dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="resources/css/hotkeys.min.css"/>
+
+    <link rel="stylesheet" type="text/css" href="resources/css/jquery.datetimepicker.css"/>
+
+    <!-- Custom Fonts -->
+    <link href="resources/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- jQuery -->
+    <!-- <script src="resources/vendor/jquery/jquery.min.js"></script> -->
+    <script type="text/javascript" src="resources/lib/jquery-2.1.4.min.js"></script>
+
+    <!-- Angularjs -->
+    <script type="text/javascript" src="resources/lib/angular.min.js"></script>
+    <script type="text/javascript" src="resources/lib/hotkeys.min.js"></script>
+    <script type="text/javascript" src="resources/lib/angular-route.min.js"></script>
+    <script type="text/javascript" src="resources/lib/ocLazyLoad.js"></script>
+    <script type="text/javascript" src="resources/lib/angular-idle.min.js"></script>
+    <script type="text/javascript" src="resources/lib/Pagination.js"></script>
+    <script type="text/javascript" src="resources/lib/jquery.table2excel.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="resources/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="resources/lib/ui-bootstrap-tpls-0.13.4.min.js"></script>
+    <script type="text/javascript" src="resources/lib/bootbox.min.js"></script>
+    <script type="text/javascript" src="resources/lib/jquery.datetimepicker.js"></script>
+    <script type="text/javascript" src="resources/lib/JsBarcode.all.min.js"></script>
+        
+    <script src="resources/lib/fileupload/angular-file-upload.min.js" type="text/javascript"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="resources/vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Angular Chart JavaScript -->
+    <!-- <script src="resources/lib/chart.js/Chart.min.js"></script> -->
+    <!-- <script src="resources/lib/angular-chart.js"></script> -->
+
+    <!-- Custom Theme JavaScript -->
+    <script src="resources/dist/js/sb-admin-2.js"></script>
+
+</head>
+
+<body ng-controller="GlobalCtrl">
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#/">{{companyname}}</a>
+                <a class="navbar-brand" href=""><i class="fa fa-calendar" data-toggle="modal" data-target="#change-period" style="cursor: pointer;"> {{financialyear}}</i></a>
+            </div>
+            <!-- /.navbar-header -->
+            <ul class="nav navbar-top-links navbar-right">
+               <!--  <a  data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
+            <img src="resources/img/product/pro4.jpg" alt="" />
+            <span class="admin-name">Admin</span>
+            <i class="fa fa-angle-down edu-icon edu-down-arrow"></i>
+        </a> -->
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="">
+                        {{firstname}}
+                        <!-- <img width="30px" height="30px" ng-src="{{com_file}}" alt="" class="img-circle" /> -->
+                        <i class="fa fa-user fa-fw fa-lg"></i> <i class="fa fa-caret-down"></i>
+
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#/changepass"><i class="fa fa-gear fa-fw"></i> Change Password</a>
+                        </li>
+                        <li  ng-if="user_type == 'admin'"><a href="" ng-click="backup()"><i class="fa fa-database fa-fw"></i>Back up</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="" ng-click="logOut()"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation" id="sidenav">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li id="dashboardindex" class="index"  ng-if="user_type == 'admin'">
+                            <a href="#/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                         <li id="menuemployeeindex" class="index" ng-if="user_type == 'admin'">
+                            <a href=""><i class="fa fa-users fa-fw"></i> Employee Master<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="newemployeeindex" class="index">
+                                    <a href="#/employee/add" class="navehidey"><i class="fa fa-plus-circle fa-fw"></i> New Employee</a>
+                                </li>
+                                <li id="employeeindex" class="index">
+                                    <a href="#/employee" class="navehidey"><i class="fa fa-list fa-fw"></i> Employee List</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li id="menucustomerindex" class="index"  ng-if="user_type == 'admin'">
+
+                            <a href=""><i class="fa fa-inr fa-fw"></i> Client Master<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                 <!-- <li id="smsindex" class="index">
+                                    <a href="#/customer/sms"><i class="fa fa-comments fa-fw"></i> Promotional SMS</a>
+                                </li> -->
+                                <li id="newcustomerindex" class="index">
+                                    <a href="#/customer/add"><i class="fa fa-plus-circle fa-fw"></i> New Client</a>
+                                </li>
+                                <li id="customerindex" class="index">
+                                    <a href="#/customer"><i class="fa fa-list fa-fw"></i> Client List</a>
+                                </li>
+                                <!-- <li id="newsaleindex" class="index">
+                                    <a href="#/sale/add"><i class="fa fa-plus-circle fa-fw"></i> New Sale</a>
+                                </li>
+                                <li id="saleindex" class="index">
+                                    <a href="#/sale"><i class="fa fa-list fa-fw"></i> Sale List</a>
+                                </li>
+                                <li id="newsalereturnindex" class="index">
+                                    <a href="#/salereturn/add"><i class="fa fa-plus-circle fa-fw"></i> New Sale Return</a>
+                                </li>
+                                <li id="salereturnindex" class="index">
+                                    <a href="#/salereturn"><i class="fa fa-list fa-fw"></i> Sale Return List</a>
+                                </li>
+                                <li id="newexpenseindex" class="index">
+                                    <a href="#/expense/add"><i class="fa fa-plus-circle fa-fw"></i> New Debtors Cashbook</a>
+                                </li>
+                                <li id="expenseindex" class="index">
+                                    <a href="#/expense"><i class="fa fa-list fa-fw"></i> Debtors Cashbook List</a>
+                                </li> -->
+                            </ul>
+                        </li>
+                        <li id="menuproductintex" class="index">
+                            <a href=""><i class="fa fa-product-hunt fa-fw"></i> Entry Master<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="newproductintex" class="index">
+                                    <a href="#/product/add"><i class="fa fa-plus-circle fa-fw"></i> New Entry</a>
+                                </li>
+                                 <li id="newproductindex" class="index" ng-if="user_type == 'emp'">
+                                    <a href="#/product/list"><i class="fa fa-list fa-fw"></i>Entry List</a>
+                                </li>
+                                <li id="productintex" class="index" ng-if="user_type == 'admin'">
+                                    <a href="#/product/adlist"><i class="fa fa-list fa-fw"></i>Entry List</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li id="menusaleintex" class="index"  ng-if="user_type == 'admin'">
+                            <a href=""><i class="fa fa-file fa-fw"></i> Sale Master<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="newsaleintex" class="index">
+                                    <a href="#/sale/add"><i class="fa fa-plus-circle fa-fw"></i> New Sale</a>
+                                </li>
+                                 <li id="newsaleindex1" class="index">
+                                    <a href="#/sale/list"><i class="fa fa-list fa-fw"></i> Sale List</a>
+                                </li>
+                                 <li id="newsaleindex2" class="index">
+                                    <a href="#/sale/pending-list"><i class="fa fa-clock-o fa-fw"></i> Pending Sale List</a>
+                                </li>
+                                <!-- <li id="productintex" class="index">
+                                    <a href="#/product/stock"><i class="fa fa-list fa-fw"></i>Stock List</a>
+                                </li> -->
+                            </ul>
+                        </li>
+                       
+                        <!-- <li id="menuvendorindex" class="index">
+                            <a href=""><i class="fa fa-money fa-fw"></i> Creditors Master<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="newvendorindex" class="index">
+                                    <a href="#/vendor/add"><i class="fa fa-plus-circle fa-fw"></i> New Creditors</a>
+                                </li>
+                                <li id="vendorindex" class="index">
+                                    <a href="#/vendor"><i class="fa fa-list fa-fw"></i> Creditors List</a>
+                                </li>
+                                <li id="newpurchaseindex" class="index">
+                                    <a href="#/purchase/add"><i class="fa fa-plus-circle fa-fw"></i> New Purchase</a>
+                                </li>
+                                <li id="purchaseindex" class="index">
+                                    <a href="#/purchase"><i class="fa fa-list fa-fw"></i> Purchase List</a>
+                                </li>
+                                <li id="newpurchasereturnindex" class="index">
+                                    <a href="#/purchasereturn/add"><i class="fa fa-plus-circle fa-fw"></i> New Purchase Return</a>
+                                </li>
+                                <li id="purchasereturnindex" class="index">
+                                    <a href="#/purchasereturn"><i class="fa fa-list fa-fw"></i> Purchase Return List</a>
+                                </li>
+                                <li id="newpurexpenseindex" class="index">
+                                    <a href="#/purexpense/add"><i class="fa fa-plus-circle fa-fw"></i> New Creditors Cashbook</a>
+                                </li>
+                                <li id="purexpenseindex" class="index">
+                                    <a href="#/purexpense"><i class="fa fa-list fa-fw"></i> Creditors Cashbook List</a>
+                                </li>
+                            </ul>
+                        </li> -->
+                        
+                        <!-- <li id="menuworkshopindex" class="index">
+                            <a href=""><i class="fa fa-industry fa-fw"></i> Workshop Master<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="newworkshopindex" class="index">
+                                    <a href="#/workshop/add"><i class="fa fa-plus-circle fa-fw"></i> New Workshop</a>
+                                </li>
+                                <li id="workshopindex" class="index">
+                                    <a href="#/workshop"><i class="fa fa-list fa-fw"></i> Workshop List</a>
+                                </li>
+                                <li id="newworkshopsaleindex" class="index">
+                                    <a href="#/workshopsale/add"><i class="fa fa-plus-circle fa-fw"></i> New Workshop Sale</a>
+                                </li>
+                                <li id="workshopsaleindex" class="index">
+                                    <a href="#/workshopsale"><i class="fa fa-list fa-fw"></i> Workshop Sale List</a>
+                                </li>
+                                <li id="newsalereturnindex" class="index">
+                                    <a href="#/salereturn/add"><i class="fa fa-plus-circle fa-fw"></i> New Workshop Sale Return</a>
+                                </li>
+                                <li id="salereturnindex" class="index">
+                                    <a href="#/salereturn"><i class="fa fa-list fa-fw"></i> Workshop Sale Return List</a>
+                                </li>
+                            </ul>
+                        </li> -->
+                        <!-- <li id="menubankindex" class="index">
+                            <a href=""><i class="fa fa-bank fa-fw"></i> Bank Master<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="cashintex" class="index">
+                                    <a href="#/cash"><i class="fa fa-usd fa-fw"></i> Cash In Hand</a>
+                                </li>
+                                <li id="newbankindex" class="index">
+                                    <a href="#/bank/add"><i class="fa fa-plus-circle fa-fw"></i> New Bank Account</a>
+                                </li>
+                                <li id="bankindex" class="index">
+                                    <a href="#/bank"><i class="fa fa-list fa-fw"></i> Bank Account List</a>
+                                </li>
+                                <li id="newbankwithdrawintex" class="index">
+                                    <a href="#/bankwithdraw/add"><i class="fa fa-plus-circle fa-fw"></i> New Cash Withdraw</a>
+                                </li>
+                                <li id="bankwithdrawintex" class="index">
+                                    <a href="#/bankwithdraw"><i class="fa fa-list fa-fw"></i> Cash Withdraw List</a>
+                                </li>
+                                <li id="newcashtransferintex" class="index">
+                                    <a href="#/cashtransfer/add"><i class="fa fa-plus-circle fa-fw"></i> New Cash Transfer</a>
+                                </li>
+                                <li id="cashtransferintex" class="index">
+                                    <a href="#/cashtransfer"><i class="fa fa-list fa-fw"></i> Cash Transfer List</a>
+                                </li>
+                            </ul>
+                        </li> -->
+                        <!-- <li id="menuexpenseindex" class="index">
+                            <a href=""><i class="fa fa-exchange fa-fw"></i> Expense Master<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="newexpensetypeindex" class="index">
+                                    <a href="#/expensetype/add"><i class="fa fa-plus-circle fa-fw"></i> New Expense Type</a>
+                                </li>
+                                <li id="expensetypeindex" class="index">
+                                    <a href="#/expensetype"><i class="fa fa-list fa-fw"></i> Expense Type List</a>
+                                </li>
+                                <li id="newdailyexpenseindex" class="index">
+                                    <a href="#/dailyexpense/add"><i class="fa fa-plus-circle fa-fw"></i> New Daily Expense</a>
+                                </li>
+                                <li id="dailyexpenseindex" class="index">
+                                    <a href="#/dailyexpense"><i class="fa fa-list fa-fw"></i> Daily Expense List</a>
+                                </li>
+                            </ul>
+                        </li> -->
+                        <li id="menureportindex" class="index" ng-if="user_type == 'admin'">
+                            <a href=""><i class="fa fa-files-o fa-fw"></i> Reports<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="salereportindex" class="index">
+                                    <a href="#/salereport">Sale</a>
+                                </li>
+                               
+                                
+                                <!-- <li id="gstindex" class="index">
+                                    <a href="#/gstreport">GST Report</a>
+                                </li> -->
+                                <li id="productreportindex" class="index">
+                                    <a href="#/productreport">Entry</a>
+                                </li>
+                                <li id="customerreportindex" class="index">
+                                    <a href="#/customerreport">Client</a>
+                                </li>
+                                <!-- <li id="vendorreportindex" class="index">
+                                    <a href="#/vendorreport">Creditors</a>
+                                </li> -->
+                               <!--  <li id="bankreportindex" class="index">
+                                    <a href="#/bankreport">Bank</a>
+                                </li> -->
+                               <!--  <li id="paymentmodereportindex" class="index">
+                                    <a href="#/paymentmodereport">Payment Mode</a>
+                                </li> -->
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse --><br>
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+        <div ng-include="'modules/common/partials/common-delete.html'"></div>
+        <div id="page-wrapper">
+            <div ng-view></div>
+
+
+                 
+
+<div class="modal fade" id="change-period" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Change Period</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <select ng-model="year" class="form-control">
+                                <option value="">Select year from</option>
+                                <option value="{{yy}}" ng-repeat = "yy in fromyyyy">{{yy}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select ng-model="year1" class="form-control">
+                                <option value="">Select year to</option>
+                                <option value="{{yy}}" ng-repeat = "yy in toyyyy">{{yy}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success btn-ok" ng-click="saveYear(year,year1)">select</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+            <p class="pull-right">Developed by - <a href="https://www.linkedin.com/in/clayton-dsouza-b13559164/" target="_blank">CLAYTON</a></p>
+        </div>
+
+        
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Controllers-->
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/globalController.js"></script>
+    <!-- Controllers-->
+
+    <!-- company -->
+    <script src="modules/company/config.js"></script>
+
+    <!-- common -->
+    <script src="modules/common/config.js"></script>
+
+    <!-- admin -->
+    <script src="modules/admin/config.js"></script>
+
+    <!-- Vendor-->
+    <script src="modules/vendor/config.js"></script>
+
+    <!-- Customer-->
+    <script src="modules/customer/config.js"></script>
+
+
+    <!-- Employee-->
+    <script src="modules/employee/config.js"></script>
+
+    <!-- unit-->
+    <script src="modules/unit/config.js"></script>
+
+    <!-- product-->
+    <script src="modules/product/config.js"></script>
+
+    <!-- Expense-->
+    <script src="modules/expense/config.js"></script>
+
+    <!--Purchase Expense-->
+    <script src="modules/purexpense/config.js"></script>
+
+    <!-- Expense Type-->
+    <script src="modules/expensetype/config.js"></script>
+
+    <!--Daily Expense-->
+    <script src="modules/dailyexpense/config.js"></script>
+
+    <!-- Sale-->
+    <script src="modules/sale/config.js"></script>
+
+    <!-- Cash-->
+    <script src="modules/cash/config.js"></script>
+
+
+    <!-- Sale Return-->
+    <script src="modules/salereturn/config.js"></script>
+
+    <!-- Report-->
+    <script src="modules/report/config.js"></script>
+    <script src="modules/report/controllers/balancesheet-report.js"></script>
+
+</body>
+
+</html>   

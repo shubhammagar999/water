@@ -1,0 +1,112 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Add New Client's Details</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+				<div class="row">
+                    <div class="col-lg-6">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Client's Name</label>
+                                <input type="text" id="cm_name" class="form-control" ng-model="customer.cm_name" />
+                            </div>
+                        </div>
+                         <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Client ID.</label>
+                                <input type="text" id="cm_serial_no" class="form-control" ng-model="customer.cm_serial_no" ng-blur="blurSerialNo()" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="col-lg-5">
+                            <div class="form-group">
+                                <label>GST</label>
+                                <input type="text" id="cm_gst_no" class="form-control" ng-model="customer.cm_gst_no" ng-blur="capitalize();"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>Start Date</label>
+                            <div class="form-group input-group">
+                                <input type="text" class="form-control" id="cDate" ng-model="customer.cm_date" readonly="readonly">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Product Price</label>
+                                <input type="number" id="cm_prod_price_set" class="form-control" ng-model="customer.cm_prod_price_set"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6"><br>
+                        <fieldset>
+                            <legend>Address Details</legend>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Address</label>
+                                    <textarea id="cm_address" class="form-control" ng-model="customer.cm_address" rows="1"></textarea>
+                                </div>
+                            </div>
+                            <!-- <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>State</label>
+                                     <select class="form-control" id="cm_state" ng-model="customer.cm_state" ng-options="states as states for states in stateList" ng-change="getCities(customer.cm_state)">
+                                    <option value="">-- Select State--</option>
+                            </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>City</label>
+                                     <select class="form-control" ng-disabled="!customer.cm_state" id="cm_city" ng-model="customer.cm_city" ng-options="city for city in city" >
+                                    <option value="">-- Select City--</option>
+                            </select>
+                                </div>
+                            </div> -->
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Pin Code</label>
+                                    <input type="text" id="cm_pin" class="form-control" ng-model="customer.cm_pin" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    
+                    <div class="col-lg-6"><br>
+                        <fieldset>
+                            <legend>Contact Details</legend>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Mobile</label>
+                                    <input type="text" id="cm_mobile" class="form-control" ng-model="customer.cm_mobile" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>E-Mail </label>
+                                     <input type="text" id="cm_email" class="form-control" ng-model="customer.cm_email" />
+                                    
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+
+				    <div class="col-lg-12">
+						<button  class="btn btn-outline btn-success" type="submit" id="btnsave" ng-click="addCustomer()">SAVE <span class="label label-success">alt+s</span></button>
+				    	<button  class="btn btn-outline btn-danger" type="button" onclick="window.location = '#/customer'" id="btncancel">Back</button>
+				    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,244 @@
+<div class="row" ng-init="getDashboardReport();">
+	<!-- getDailyBalanceReport(); -->
+    <div class="col-lg-12">
+        <h1 class="page-header">Dashboard</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    
+    <div class="col-lg-3 col-md-6">
+        <div style="box-shadow: 10px 10px 5px #efefef;" class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <!-- <i class="fa fa-inr fa-5x"></i> -->
+                        <img src="resources/images/dayli-report.png" height="70" width="70">
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">{{salereport}}</div>
+                        <div>Today's No of Sale!</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#/salereport">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+        <div style="box-shadow: 10px 10px 5px #efefef;" class="panel panel-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <!-- <i class="fa fa-money fa-5x"></i>                         -->
+                        <img src="resources/images/reports.png" height="70" width="70">
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">????</div>
+                        <div>Sale Report!</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#/purchasereport">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div style="box-shadow: 10px 10px 5px #efefef;" class="panel panel-red">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <!-- <i class="fa fa-calendar fa-5x"></i> -->
+                        <img src="resources/images/billing-status.png" height="70" width="70">
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">????</div>
+                        <div>Billing Status!</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#/paymentdatereport">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div  class="col-lg-3 col-md-6">
+        <div style="box-shadow: 10px 10px 5px #efefef;" class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <!-- <i class="fa fa-credit-card fa-5x"></i> -->
+                        <img src="resources/images/company-profile.png" height="70" width="70">
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">{{chequereceivedatereport}}</div>
+                        <div>Company Profile!</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#/chequereceivedate">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div  class="col-lg-3 col-md-6">
+        <div style="box-shadow: 10px 10px 5px #efefef;" class="panel panel-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <!-- <i class="fa fa-columns fa-5x"></i> -->
+                        <img src="resources/images/user-profile.png" height="70" width="70">
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">&nbsp;</div>
+                        <div>User Details!</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#/paymentmodereport">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div  class="col-lg-3 col-md-6">
+        <div style="box-shadow: 10px 10px 5px #efefef;" class="panel panel-red">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <!-- <i class="fa fa-opencart fa-5x"></i> -->
+                        <img src="resources/images/admin-profile.png" height="70" width="70">
+
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">{{deliveryreport}}</div>
+                        <div>Admin Profile</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#/deliveryreport">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+    <div  class="col-lg-3 col-md-6">
+        <div style="box-shadow: 10px 10px 5px #efefef;" class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-yelp fa-5x"></i>
+                        <!-- <img src="resources/images/question.png" height="70" width="70"> -->
+
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">&nbsp;</div>
+                        <div>Developer Details!</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#/developer">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+   <!--  <div class="col-lg-3 col-md-6">
+        <div class="panel panel-red">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-usd fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">{{cashreport}}</div>
+                        <div>Cash In Hand</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#/dashboard">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div> -->
+    <!-- <div class="col-lg-3 col-md-6">
+        <div class="panel panel-red">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-university fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">{{chequepaymentdatereport}}</div>
+                        <div>Cheque Payment!</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#/chequepaymentdate">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-comments fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">{{smsbalance}}</div>
+                        <div>SMS Balance!</div>
+                    </div>
+                </div>
+            </div>
+            <a href="">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div> -->
+<!-- /.row -->

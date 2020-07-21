@@ -1,0 +1,182 @@
+<div class="row" ng-init="getAll();">
+    <div class="col-lg-12">
+        <h1 class="page-header">Product Report</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div align="center" v-align="bottom" ng-hide="loading1 == 1" style="margin: auto; height:400px;">
+    <img src="resources/images/reload.gif" style="margin-top: 170px; height: 60px;width: 60px;">
+</div>
+<div class="row" ng-show="loading1 == 1">
+	<div class="col-lg-12">
+	    <div class="panel panel-default">
+            <div class="panel-body">
+            	<div class="col-lg-12">
+                    <div class="col-sm-offset-6 col-lg-4">
+                        <div class="form-group pull-left">
+							<button  class="btn btn-outline btn-warning" type="button" ng-click="exportXls()">Export</button>
+							<button  class="btn btn-outline btn-success" type="button" ng-click="exportPrint()">Print</button>
+						</div>
+					</div>
+                </div>
+            	<div class="row">
+		        	<div class="col-lg-4">
+		            	<input type="text" class="form-control" id="searchtext" ng-model="searchtext" onkeyup="angular.element(this).scope().getSearch();" placeholder = "Search by - Product Name"/>
+		            </div>
+		        	<div class="col-lg-3">
+		            	<label class="form-control">Total Stock Qauntity : {{totalvalue}}</label>
+		            </div>
+		        	<div class="col-lg-3">
+		            	<label class="form-control">Total Stock Amount : {{totalvalue}}</label>
+		            </div>
+		            <div class="col-lg-2">
+		            	<button  class="btn btn-outline btn-danger" type="button" onclick="window.location = '#/dashboard'" id="btncancel">Back</button>
+		            </div>
+		        </div>
+		        <br>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+								<th>Product Name</th>
+                                <th>Unit Name</th>
+								<th>Quantity</th>
+                                <th>Price</th>
+								<th>HSN</th>
+								<th>CGST</th>
+								<th>SGST</th>
+                                <th>IGST</th>
+								<th>Sell Price</th>
+								<th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="product in filteredTodos | filter : product">
+								<td>{{product.pm_name}}</td>
+								<td>{{product.um_name}}</td>
+								<td>{{product.quantity | number : '3'}}</td>
+                                <td>{{product.pm_price | number : '2'}}</td>
+								<td>{{product.pm_hsn}}</td>
+								<!-- <td>{{product.pm_cgst | number : '2'}}</td> -->
+								<!-- <td>{{product.pm_sgst | number : '2'}}</td> -->
+								<!-- <td>{{product.pm_igst | number : '2'}}</td> -->
+								<td>{{product.pm_sale_price | number : '2'}}</td>
+								<td>
+									<i class="fa fa-info-circle" data-toggle="modal" data-target="#view-details" ng-click="viewCustomerDetails1($index);"></i>
+									<a href="#/product/edit/{{product.pm_id}}"><i class="fa fa-pencil"></i></a>
+								</td>
+		                    </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <span id="pagination_detail" ng-show="filteredTodos.length > 0" class="pagination_ds">Showing {{ filterUserend }} to {{filterUser}} of {{productListcount}} Product's</span>
+				    <span id="pagination_div" align="right" ng-show="filteredTodos.length > 0"
+				          style="float: right;margin-top: -27px;">
+				      <pagination
+				              ng-model="currentPage"
+				              total-items="productListcount"
+				              max-size="maxSize"
+				              boundary-links="true" data-num-pages="noOfPages"
+				              items-per-page="numPerPage">
+				      </pagination>
+			    	</span>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+	    </div>
+	    <!-- /.panel -->
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+
+<div class="modal fade" id="view-details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Product Details</h4>
+            </div>
+            <div class="modal-body">
+            	<table class="table">
+            		<tr>
+			          <td><input class="form-control" id="user-datepicker-from" type="text" placeholder="From Date"></td>
+			          <td><input class="form-control" id="user-datepicker-to" type="text" placeholder="To Date"></td>
+			          <td><button type="button" class="btn" id="filter-user-btn" ng-click="filter()">Filter</button></td>
+		          	</tr>
+		        </table>
+                <table class="table">
+            		<tr>
+            			<td>Name: <strong>{{products.pm_name}} {{products.um_name}}</strong></td>
+            			<td>Quantity: <strong>{{products.quantity}}</strong></td>
+            			<td>Price: <strong>{{products.pm_price}}</strong></td>
+            			<td>Sell Price: <strong>{{products.pm_sale_price}}</strong></td>
+            		</tr>
+            	</table>
+            	<table class="table" border="1" id="contentexport">
+					<thead>
+					<tr>
+						<th>Type</th>
+						<th>Invoice</th>
+						<th>Date</th>
+						<th>Purchase</th>
+						<th>Sale</th>
+						<!-- <th>DR/CR</th> -->
+						<th>Balance</th>
+					</tr>
+					</thead>
+					<tbody id="content">
+					<tr ng-repeat="purchaseDetails in categoryList | filter : purchaseDetails">
+						<td style="padding:4px 8px 4px 8px;">{{purchaseDetails.type}}</td>
+						<td style="padding:4px 8px 4px 8px;">{{purchaseDetails.invoice}}</td>
+						<td style="padding:4px 8px 4px 8px;">{{purchaseDetails.date | date : 'dd-MM-yyyy'}}</td>
+						<td style="padding:4px 8px 4px 8px;">{{purchaseDetails.purchase}}</td>
+						<td style="padding:4px 8px 4px 8px;">{{purchaseDetails.sale}}</td>
+						<!-- <td style="padding:4px 8px 4px 8px;">{{purchaseDetails.drcr}}</td> -->
+						<td style="padding:4px 8px 4px 8px;">{{purchaseDetails.bal}}</td>
+					</tr>
+					</tbody>
+				</table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" ng-click="exportXls();">Export</button>
+                <button type="button" class="btn btn-primary" ng-click="printDetails();">Print</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="printTable">
+    <table class="table table-hover" id="contentexportList">
+        <thead>
+            <tr>
+				<th>Product Name</th>
+                <th>Unit Name</th>
+				<th>Quantity</th>
+                <th>Price</th>
+				<th>HSN</th>
+				<th>CGST</th>
+				<th>SGST</th>
+                <th>IGST</th>
+				<th>Sell Price</th>
+            </tr>
+        </thead>
+        <tbody id="contentExportPrint">
+            <tr ng-repeat="product in productList | filter : product">
+				<td>{{product.pm_name}}</td>
+				<!-- <td>{{product.um_name}}</td> -->
+				<!-- <td>{{product.quantity | number : '3'}}</td> -->
+                <!-- <td>{{product.pm_price | number : '2'}}</td> -->
+				<!-- <td>{{product.pm_hsn}}</td>
+				<td>{{product.pm_cgst | number : '2'}}</td>
+				<td>{{product.pm_sgst | number : '2'}}</td>
+				<td>{{product.pm_igst | number : '2'}}</td>
+				<td>{{product.pm_sale_price | number : '2'}}</td> -->
+            </tr>
+        </tbody>
+    </table>
+</div>

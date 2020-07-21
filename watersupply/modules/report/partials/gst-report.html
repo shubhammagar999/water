@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">GST Report</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div align="center" v-align="bottom" ng-hide="loading1 == 1" style="margin: auto; height:400px;">
+    <img src="resources/images/reload.gif" style="margin-top: 170px; height: 60px;width: 60px;">
+</div>
+<div class="row" ng-show="loading1 == 1">
+	<div class="col-lg-12">
+	    <div class="panel panel-default">
+            <div class="panel-body">
+        		<div class="col-lg-12">
+				    <div class="col-lg-3">
+                        <div class="form-group input-group">
+                            <label>From Date</label>
+                            <div class="form-group input-group">
+	                            <input type="text" class="form-control" id="user-datepicker-from" readonly="readonly">
+	                            <span class="input-group-btn">
+	                                <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i>
+	                                </button>
+	                            </span>
+	                        </div>
+                        </div>
+                    </div>
+				    <div class="col-lg-3">
+                        <div class="form-group input-group">
+                            <label>To Date</label>
+                            <div class="form-group input-group">
+	                            <input type="text" class="form-control" id="user-datepicker-to" readonly="readonly">
+	                            <span class="input-group-btn">
+	                                <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i>
+	                                </button>
+	                            </span>
+	                        </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group pull-left"><br>
+							<button  class="btn btn-outline btn-info" type="button" id="filter-user-btn" ng-click="filter()"><i class="fa fa-filter"></i> Filter</button>
+							<button  class="btn btn-outline btn-primary" type="button" id="reset-user-btn" ng-click="reset()"><i class="fa fa-times"></i> Reset</button>
+						</div>
+					</div>
+                    <!-- <div class="col-lg-1">
+                        <button type="button" class="btn btn-outline btn-success pull-right" ng-click="exportXls();">Export</button>
+                    </div>
+                    <div class="col-lg-1">
+                        <button type="button" class="btn btn-outline btn-primary pull-right" ng-click="printList();">Print</button>
+                    </div> -->
+                </div>
+		        <br>
+            </div>
+            <!-- /.panel-body -->
+	    </div>
+	    <!-- /.panel -->
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
